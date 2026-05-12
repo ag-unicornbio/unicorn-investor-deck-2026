@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Slide 12 - The Ask (v7)</title>
+<style>
+  /* ============================================================
+     SLIDE 12 - THE ASK (v7)
+     Per Jack 2026-04-29 (round 3):
+       - "$15M" in buys-header now Prometheus.
+       - Bullet 3: "Build first AI model" (was "foundation model").
+       - Spacing between header/lines/lines bumped 15%.
+       - Last-round tile moved UP: panel switched from space-between
+                          to flex-start, fixed 3vh margin between
+                          buys-section and last-round-section.
+       - Chart shrunk ~8-10%: padding added to chart-wrap.
+       - SVG text sizes bumped 11% to maintain rendered text size
+                          despite chart shrink.
+       - Legend now has margin-bottom for breathing above footer line.
+     ============================================================ */
+
+  @font-face {
+    font-family: 'DIN Pro';
+    src: url('assets/fonts/DINPro-Light.ttf') format('truetype');
+    font-weight: 300;
+  }
+  @font-face {
+    font-family: 'DIN Pro';
+    src: url('assets/fonts/DINPro-Medium.ttf') format('truetype');
+    font-weight: 500;
+  }
+
+  :root {
+    --prometheus: #D91C5C;
+    --aquarius: #26A9E0;
+    --bg-charcoal: #1A1A1A;
+    --layer-surface: #222226;
+    --layer-border: rgba(240, 240, 240, 0.10);
+    --pure-white: #FFFFFF;
+    --off-white: #F0F0F0;
+    --body-white: #E8E8E8;
+    --label-grey: rgba(240, 240, 240, 0.55);
+    --body-grey: rgba(240, 240, 240, 0.85);
+    --rule-grey: rgba(240, 240, 240, 0.18);
+    --source-grey: rgba(240, 240, 240, 0.40);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+    font-family: 'DIN Pro', 'Helvetica Neue', sans-serif;
+    font-variant-ligatures: none;
+    font-feature-settings: "liga" 0, "clig" 0;
+  }
+
+  .slide {
+    position: relative;
+    width: 100vw;
+    height: 56.25vw;
+    max-height: 100vh;
+    max-width: 177.78vh;
+    margin: 0 auto;
+    overflow: hidden;
+    background-color: var(--bg-charcoal);
+    padding: 4% 7% 2.5% 7%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===== CHROME ===== */
+  .top-strip {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3.5vh;
+    flex-shrink: 0;
+  }
+
+  .top-strip .header-logo {
+    height: 4.0vw;
+    max-height: 64px;
+    width: auto;
+  }
+
+  .top-strip .section-label {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(16px, 1.5vw, 22px);
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--pure-white);
+  }
+
+  .headline-block {
+    text-align: center;
+    margin-bottom: 2.5vh;
+    flex-shrink: 0;
+  }
+
+  .slide-headline {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(30px, 3.0vw, 48px);
+    color: var(--pure-white);
+    line-height: 1.2;
+    letter-spacing: -0.005em;
+    max-width: 92%;
+    margin: 0 auto;
+  }
+
+  .top-rule {
+    height: 3px;
+    background: linear-gradient(to right, var(--prometheus), var(--aquarius));
+    margin: 0 0 4vh;
+    flex-shrink: 0;
+  }
+
+  /* ===== BODY ===== */
+  .body {
+    flex: 1;
+    display: flex;
+    gap: 4vw;
+    position: relative;
+    min-height: 0;
+  }
+
+  /* Left panel: flex-start, fixed 3vh gap between sections so the
+     last-round tile sits closer to the milestones (was space-between
+     which pushed the tile to the bottom of the panel) */
+  .panel-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-width: 0;
+    padding-top: 0;
+  }
+
+  .panel-right {
+    flex: 1.05;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    /* Scale the whole right-side tile (chart + legend) down 15% per
+       Jack 2026-04-29. transform: scale doesn't change layout box, so
+       panel-right keeps its flex slot in body; visual content shrinks
+       and centers within the original slot, leaving whitespace margin. */
+    transform: scale(0.85);
+    transform-origin: center center;
+  }
+
+  /* ----- "$15M buys us:" header + milestones ----- */
+  .buys-section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .buys-header {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(26px, 2.2vw, 33px);
+    color: var(--pure-white);
+    letter-spacing: -0.005em;
+    margin-bottom: 2.15vh;
+  }
+
+  .buys-amount {
+    color: var(--prometheus);
+  }
+
+  .milestones {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55vh;
+  }
+
+  .milestone {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(19px, 1.6vw, 24px);
+    color: var(--off-white);
+    line-height: 1.45;
+    padding: 0.75vh 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 0.9vw;
+    align-items: baseline;
+    white-space: nowrap;
+  }
+
+  .milestone-num {
+    color: var(--prometheus);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  /* ----- Last round section (tile: grey rule + content) ----- */
+  .last-round-section {
+    border-top: 1px solid var(--rule-grey);
+    padding-top: 2.1vh;
+    margin-top: 2.1vh;
+  }
+
+  .last-round-header {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(26px, 2.2vw, 33px);
+    color: var(--pure-white);
+    letter-spacing: -0.005em;
+    margin-bottom: 0.85vh;
+  }
+
+  .last-round-body {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 300;
+    font-size: clamp(18px, 1.5vw, 22px);
+    color: var(--body-white);
+    line-height: 1.45;
+  }
+
+  .last-round-body ul {
+    list-style-position: outside;
+    padding-left: 1.1em;
+    margin: 0;
+  }
+
+  .last-round-body li {
+    margin-bottom: 2vh;
+  }
+
+  .last-round-body li:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ----- Chart (right panel) -----
+     Padding shrinks the SVG render area ~10%; SVG text sizes bumped
+     ~11% inside the SVG to compensate so rendered text size matches
+     v6 sizing while the chart is visually smaller. */
+  .chart-wrap {
+    flex: 1;
+    width: 100%;
+    position: relative;
+    min-height: 0;
+    padding: 1.5vh 4%;
+  }
+
+  .chart-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .chart-legend {
+    display: flex;
+    justify-content: center;
+    gap: 2vw;
+    margin-top: 0.4vh;
+    margin-bottom: 1.5vh;
+    flex-shrink: 0;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6vw;
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(13px, 1.1vw, 17px);
+    letter-spacing: 0.04em;
+    color: var(--body-grey);
+  }
+
+  .legend-swatch {
+    display: inline-block;
+  }
+  .legend-swatch--bar {
+    width: 18px;
+    height: 14px;
+    background: linear-gradient(to bottom, #D91C5C, #7A1238);
+    border-radius: 2px;
+  }
+  .legend-swatch--line {
+    width: 22px;
+    height: 0;
+    border-top: 2.5px dashed #26A9E0;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    margin-top: auto;
+    padding-top: 1.6vh;
+    border-top: 1px solid var(--rule-grey);
+    flex-shrink: 0;
+  }
+
+  .footer-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(14px, 1.15vw, 18px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--off-white);
+  }
+
+  .footer-text .pipe {
+    display: inline-block;
+    margin: 0 0.7em;
+    color: rgba(240, 240, 240, 0.4);
+  }
+
+  @media print {
+    @page { size: 1920px 1080px; margin: 0; }
+    html, body { width: 1920px; height: 1080px; }
+    .slide { width: 1920px; height: 1080px; max-width: none; max-height: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+
+  <div class="top-strip">
+    <img src="assets/img/UB_Horisontal_Color.png" alt="Unicorn" class="header-logo">
+    <span class="section-label">The Ask</span>
+  </div>
+
+  <div class="headline-block">
+    <h1 class="slide-headline">We are building the world's first $1T biology infrastructure company</h1>
+  </div>
+
+  <div class="top-rule"></div>
+
+  <div class="body">
+
+    <!-- LEFT: $15M buys us + last round tile -->
+    <div class="panel-left">
+
+      <div class="buys-section">
+        <div class="buys-header">Raising <span class="buys-amount">$15M</span> to:</div>
+        <div class="milestones">
+          <div class="milestone"><span class="milestone-num">01</span><span>Hit &gt;$50M revenue in &lt;24 months.</span></div>
+          <div class="milestone"><span class="milestone-num">02</span><span>Hire COO, Head of Commercial and ML engineering team ('27).</span></div>
+          <div class="milestone"><span class="milestone-num">03</span><span>Launch new robotic, software, dataset, and AI tool products ('27-28).</span></div>
+          <div class="milestone"><span class="milestone-num">04</span><span>US expansion: Boulder, CO facility ('27) + US commercial team ('28).</span></div>
+        </div>
+      </div>
+
+      <div class="last-round-section">
+        <div class="last-round-header">This is our last round</div>
+        <div class="last-round-body">
+          <ul>
+            <li>Unicorn is profitable (2026).</li>
+            <li>$15M unlocks the data factory at scale.</li>
+            <li>Future financing: debt, secondaries, IPO.</li>
+            <li>Invest now: minimal dilution, asymmetric upside.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: bars (revenue) + line (customers) -->
+    <div class="panel-right">
+      <div class="chart-wrap">
+        <svg class="chart-svg" viewBox="0 0 600 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+          <!-- v7: SVG text bumped ~11% to compensate for chart-wrap padding shrink -->
+
+          <defs>
+            <linearGradient id="barGrad" gradientUnits="userSpaceOnUse" x1="0" y1="60" x2="0" y2="460">
+              <stop offset="0%" stop-color="#D91C5C" stop-opacity="0.95"/>
+              <stop offset="100%" stop-color="#7A1238" stop-opacity="0.85"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Plot area baseline -->
+          <line x1="70" y1="460" x2="570" y2="460"
+                stroke="rgba(240, 240, 240, 0.35)" stroke-width="1"/>
+
+          <!-- Y-axis verticals -->
+          <line x1="70" y1="60" x2="70" y2="460"
+                stroke="rgba(38, 169, 224, 0.30)" stroke-width="1"/>
+          <line x1="570" y1="60" x2="570" y2="460"
+                stroke="rgba(217, 28, 92, 0.30)" stroke-width="1"/>
+
+          <!-- Subtle horizontal gridlines -->
+          <line x1="70" y1="260" x2="570" y2="260"
+                stroke="rgba(240, 240, 240, 0.08)" stroke-width="1" stroke-dasharray="3,4"/>
+          <line x1="70" y1="60" x2="570" y2="60"
+                stroke="rgba(240, 240, 240, 0.08)" stroke-width="1" stroke-dasharray="3,4"/>
+
+          <!-- Left Y-axis: customers (Aquarius) -->
+          <text x="60" y="40" text-anchor="end"
+                font-family="'DIN Pro', sans-serif" font-weight="500"
+                font-size="16" fill="#26A9E0"
+                letter-spacing="0.18em">CUSTOMERS</text>
+          <text x="60" y="68" text-anchor="end"
+                font-family="'DIN Pro', sans-serif" font-weight="500"
+                font-size="17" fill="#26A9E0"
+                letter-spacing="0.04em">5,000</text>
+          <text x="60" y="266" text-anchor="end"
+                font-family="'DIN Pro', sans-serif" font-weight="500"
+                font-size="17" fill="rgba(38, 169, 224, 0.7)"
+                letter-spacing="0.04em">2,500</text>
+          <text x="60" y="466" text-anchor="end"
+                font-family="'DIN Pro', sans-serif" font-weight="500"
+                font-size="17" fill="rgba(38, 169, 224, 0.7)"
+                letter-spacing="0.04em">0</text>
+
+          <!-- Right Y-axis: revenue (Prometheus) -->
+          <text x="580" y="40" text-anchor="start"
+                font-family="'DIN Pro', sans-serif" font-weight="500"
+                font-size="16" fill="#D91C5C"
+                letter-spacing="0.18em">REVENUE</text>
+          <text x="580" y="68" text-anchor="start"
+                font-family="'DIN Pro', sans-serif" font-weight="500"
+                font-size="17" fill="#D91C5C"
+                letter-spacing="0.04em">$1.5B</text>
+          <text x="580" y="266" text-anchor="start"
+                font-family="'DIN Pro', sans-serif" font-weight="500"
+                font-size="17" fill="rgba(217, 28, 92, 0.7)"
+                letter-spacing="0.04em">$750M</text>
+          <text x="580" y="466" text-anchor="start"
+                font-family="'DIN Pro', sans-serif" font-weight="500"
+                font-size="17" fill="rgba(217, 28, 92, 0.7)"
+                letter-spacing="0.04em">$0</text>
+
+          <!-- X-axis year labels -->
+          <text x="88" y="486" text-anchor="middle"
+                font-family="'DIN Pro', sans-serif" font-weight="500"
+                font-size="18" fill="rgba(240, 240, 240, 0.65)"
+                letter-spacing="0.18em">2027</text>
+          <text x="178" y="486" text-anchor="middle"
+                font-family="'DIN Pro', sans-serif" font-weight="500"
+                font-size="18" fill="rgba(240, 240, 240, 0.65)"
+                letter-spacing="0.18em">2028</text>
+          <text x="268" y="486" text-anchor="middle"
+                font-family="'DIN Pro', sans-serif" font-weight="500"
+                font-size="18" fill="rgba(240, 240, 240, 0.65)"
+                letter-spacing="0.18em">2029</text>
+          <text x="358" y="486" text-anchor="middle"
+                font-family="'DIN Pro', sans-serif" font-weight="500"
+                font-size="18" fill="rgba(240, 240, 240, 0.65)"
+                letter-spacing="0.18em">2030</text>
+          <text x="448" y="486" text-anchor="middle"
+                font-family="'DIN Pro', sans-serif" font-weight="500"
+                font-size="18" fill="rgba(240, 240, 240, 0.65)"
+                letter-spacing="0.18em">2031</text>
+          <text x="538" y="486" text-anchor="middle"
+                font-family="'DIN Pro', sans-serif" font-weight="500"
+                font-size="18" fill="rgba(240, 240, 240, 0.65)"
+                letter-spacing="0.18em">2032</text>
+
+          <!-- ===== BARS: revenue ===== -->
+          <rect x="68" y="455.7" width="40" height="4.3" fill="url(#barGrad)" rx="2"/>
+          <rect x="158" y="446.7" width="40" height="13.3" fill="url(#barGrad)" rx="2"/>
+          <rect x="248" y="415.2" width="40" height="44.8" fill="url(#barGrad)" rx="2"/>
+          <rect x="338" y="353.3" width="40" height="106.7" fill="url(#barGrad)" rx="2"/>
+          <rect x="428" y="222.7" width="40" height="237.3" fill="url(#barGrad)" rx="2"/>
+          <rect x="518" y="60" width="40" height="400" fill="url(#barGrad)" rx="2"/>
+
+          <!-- Bar value labels -->
+          <text x="88" y="445" text-anchor="middle"
+                font-family="'DIN Pro', sans-serif" font-weight="500"
+                font-size="16" fill="rgba(217, 28, 92, 0.85)"
+                letter-spacing="-0.01em">$16M</text>
+          <text x="178" y="436" text-anchor="middle"
+                font-family="'DIN Pro', sans-serif" font-weight="500"
+                font-size="16" fill="rgba(217, 28, 92, 0.85)"
+                letter-spacing="-0.01em">$50M</text>
+          <text x="268" y="404" text-anchor="middle"
+                font-family="'DIN Pro', sans-serif" font-weight="500"
+                font-size="16" fill="rgba(217, 28, 92, 0.85)"
+                letter-spacing="-0.01em">$168M</text>
+          <text x="358" y="342" text-anchor="middle"
+                font-family="'DIN Pro', sans-serif" font-weight="500"
+                font-size="16" fill="rgba(217, 28, 92, 0.85)"
+                letter-spacing="-0.01em">$400M</text>
+          <text x="448" y="196" text-anchor="middle"
+                font-family="'DIN Pro', sans-serif" font-weight="500"
+                font-size="17" fill="#D91C5C"
+                letter-spacing="-0.01em">$890M</text>
+          <text x="538" y="48" text-anchor="middle"
+                font-family="'DIN Pro', sans-serif" font-weight="500"
+                font-size="20" fill="#FFFFFF"
+                letter-spacing="-0.01em">~$1.5B</text>
+
+          <!-- ===== LINE: customers ===== -->
+          <polyline points="88,454.8 178,451.2 268,432.8 358,386.4 448,276 538,92"
+                    fill="none"
+                    stroke="#26A9E0" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round"
+                    stroke-dasharray="6,5"/>
+
+          <circle cx="88" cy="454.8" r="5" fill="#26A9E0" stroke="#1A1A1A" stroke-width="1.5"/>
+          <circle cx="178" cy="451.2" r="5" fill="#26A9E0" stroke="#1A1A1A" stroke-width="1.5"/>
+          <circle cx="268" cy="432.8" r="5" fill="#26A9E0" stroke="#1A1A1A" stroke-width="1.5"/>
+          <circle cx="358" cy="386.4" r="5" fill="#26A9E0" stroke="#1A1A1A" stroke-width="1.5"/>
+          <circle cx="448" cy="276" r="5" fill="#26A9E0" stroke="#1A1A1A" stroke-width="1.5"/>
+          <circle cx="538" cy="92" r="7" fill="#26A9E0" stroke="#1A1A1A" stroke-width="1.5"/>
+
+          <!-- Customer endpoint label dropped per Jack 2026-04-29:
+               either every dot gets a number or none do; leaning none. -->
+        </svg>
+      </div>
+
+      <div class="chart-legend">
+        <div class="legend-item">
+          <span class="legend-swatch legend-swatch--bar"></span>
+          <span>Revenue</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-swatch legend-swatch--line"></span>
+          <span>Customers</span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <div class="footer-text">
+      <span>Unicorn Biotechnologies<span class="pipe">|</span>Investor Deck 2026</span>
+      <span>12 / 13</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

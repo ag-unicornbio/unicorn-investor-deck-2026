@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Unicorn Biotechnologies — Investor Deck — Slide 1</title>
+<style>
+  /* ============================================================
+     UNICORN BIOTECHNOLOGIES INVESTOR DECK
+     Slide 1 — Title (Split Composition)
+     ------------------------------------------------------------
+     Composition:
+     - Left ~55% of slide: deep black, hosts tagline/logo/metadata
+     - Right ~45% of slide: full-height organic33.jpg atmospheric
+     - Soft feathered seam between the two for a cinematic transition
+     - Tagline left-aligned within its half, optical-centre vertical
+     - Unicorn logo (transparent PNG) top-left
+     - "Investor Deck   April 2026" bottom-left, DIN Pro Light
+     - "Confidential" bottom-right (over atmospheric, with subtle scrim)
+     ============================================================ */
+
+  @font-face {
+    font-family: 'Unicorn';
+    src: url('assets/fonts/Unicorn-Medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: block;
+  }
+
+  @font-face {
+    font-family: 'DIN Pro';
+    src: url('assets/fonts/DINPro-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: block;
+  }
+
+  @font-face {
+    font-family: 'DIN Pro';
+    src: url('assets/fonts/DINPro-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: block;
+  }
+
+  :root {
+    --prometheus: #D91C5C;
+    --aquarius: #26A9E0;
+    --deep-charcoal: #1A1A1F;
+    --true-black: #0A0A0A;
+    --pure-white: #FFFFFF;
+    --off-white: #F0F0F0;
+    --metadata-grey: rgba(240, 240, 240, 0.55);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+  }
+
+  /* 16:9 slide container, fills viewport, centred */
+  .slide {
+    position: relative;
+    width: 100vw;
+    height: 56.25vw;
+    max-height: 100vh;
+    max-width: 177.78vh;
+    margin: 0 auto;
+    overflow: hidden;
+    background-color: var(--true-black);
+  }
+
+  /* Atmospheric pane — right portion of slide.
+     Wider than before (65%) so the longer dissolve has room to breathe.
+     Mask-image creates a long, cinematic dissolve across ~45% of the
+     pane width — soft transition that reads as atmospheric depth
+     rather than a hard split. */
+  .atmospheric {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 65%;
+    height: 100%;
+    background-image: url('assets/img/organic33.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    /* Long cinematic dissolve — atmospheric eases in across the
+       leftmost ~45% of the pane width. Each opacity stop is closer
+       together than before, producing a smoother gradient. */
+    -webkit-mask-image: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.01) 4%,
+      rgba(0, 0, 0, 0.05) 8%,
+      rgba(0, 0, 0, 0.10) 12%,
+      rgba(0, 0, 0, 0.18) 16%,
+      rgba(0, 0, 0, 0.26) 20%,
+      rgba(0, 0, 0, 0.35) 24%,
+      rgba(0, 0, 0, 0.45) 28%,
+      rgba(0, 0, 0, 0.55) 32%,
+      rgba(0, 0, 0, 0.65) 36%,
+      rgba(0, 0, 0, 0.74) 40%,
+      rgba(0, 0, 0, 0.82) 44%,
+      rgba(0, 0, 0, 0.90) 48%,
+      rgba(0, 0, 0, 0.95) 52%,
+      rgba(0, 0, 0, 0.99) 56%,
+      rgba(0, 0, 0, 1) 60%,
+      black 100%
+    );
+    mask-image: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.01) 4%,
+      rgba(0, 0, 0, 0.05) 8%,
+      rgba(0, 0, 0, 0.10) 12%,
+      rgba(0, 0, 0, 0.18) 16%,
+      rgba(0, 0, 0, 0.26) 20%,
+      rgba(0, 0, 0, 0.35) 24%,
+      rgba(0, 0, 0, 0.45) 28%,
+      rgba(0, 0, 0, 0.55) 32%,
+      rgba(0, 0, 0, 0.65) 36%,
+      rgba(0, 0, 0, 0.74) 40%,
+      rgba(0, 0, 0, 0.82) 44%,
+      rgba(0, 0, 0, 0.90) 48%,
+      rgba(0, 0, 0, 0.95) 52%,
+      rgba(0, 0, 0, 0.99) 56%,
+      rgba(0, 0, 0, 1) 60%,
+      black 100%
+    );
+  }
+
+  /* Subtle dimming overlay on the atmospheric pane */
+  .atmospheric::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.3) 0%,
+      rgba(0, 0, 0, 0.1) 30%,
+      rgba(0, 0, 0, 0.0) 60%,
+      rgba(0, 0, 0, 0.15) 100%
+    );
+    pointer-events: none;
+  }
+
+  /* Logo — top-left, transparent PNG. Upsized for stronger presence. */
+  .logo {
+    position: absolute;
+    top: 5.5%;
+    left: 5%;
+    width: 22%;
+    max-width: 340px;
+    height: auto;
+    z-index: 3;
+  }
+
+  .logo img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Tagline — left-aligned in the left half, optical-centre vertical.
+     Locked: Unicorn Light. Renders all-lowercase by design.
+     Two-line composition: "the data foundry" / "for biology" —
+     intentional break, no terminal period. */
+  .tagline {
+    position: absolute;
+    top: 50%;
+    left: 5%;
+    transform: translateY(-55%);
+    width: 50%;
+    z-index: 3;
+
+    font-family: 'Unicorn', 'DIN Pro', 'Helvetica Neue', sans-serif;
+    font-weight: 500;
+    font-size: clamp(32px, 4.0vw, 72px);
+    line-height: 1.05;
+    letter-spacing: 0;
+    color: var(--pure-white);
+  }
+
+  /* Borealis gradient accent line above tagline.
+     Sized at 60% of the tagline's text width using a CSS variable
+     so it reads as a deliberate structural element, not an oversight. */
+  .tagline::before {
+    content: '';
+    display: block;
+    width: 60%;
+    max-width: 480px;
+    height: 2px;
+    background: linear-gradient(to right, var(--prometheus), var(--aquarius));
+    margin-bottom: 28px;
+  }
+
+  /* Bottom-left metadata: full off-white, larger, properly legible.
+     Single line: "UNICORN BIOTECHNOLOGIES | INVESTOR DECK 2026" */
+  .metadata {
+    position: absolute;
+    bottom: 5%;
+    z-index: 3;
+
+    font-family: 'DIN Pro', 'Helvetica Neue', sans-serif;
+    font-weight: 500;
+    font-size: clamp(13px, 1.35vw, 22px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--off-white);
+    line-height: 1.5;
+  }
+
+  .metadata--left {
+    left: 5%;
+  }
+
+  .metadata .pipe {
+    display: inline-block;
+    margin: 0 0.7em;
+    color: rgba(240, 240, 240, 0.5);
+  }
+
+  /* Print/PDF export — locks dimensions to 1920x1080 */
+  @media print {
+    @page {
+      size: 1920px 1080px;
+      margin: 0;
+    }
+    html, body {
+      width: 1920px;
+      height: 1080px;
+    }
+    .slide {
+      width: 1920px;
+      height: 1080px;
+      max-width: none;
+      max-height: none;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+
+  <!-- Right-side atmospheric pane with feathered left edge -->
+  <div class="atmospheric"></div>
+
+  <!-- Top-left Unicorn logo (transparent PNG) -->
+  <div class="logo">
+    <img src="assets/img/UB_Horisontal_Color.png" alt="Unicorn Biotechnologies">
+  </div>
+
+  <!-- Left-aligned tagline with Borealis accent line.
+       Two-line composition, no terminal period. -->
+  <div class="tagline">
+    the data factory<br>for biology
+  </div>
+
+  <!-- Bottom-left: company name + deck marker -->
+  <div class="metadata metadata--left">
+    Unicorn Biotechnologies<span class="pipe">|</span>Investor Deck 2026
+  </div>
+
+</div>
+
+</body>
+</html>

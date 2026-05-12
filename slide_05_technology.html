@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Slide 5 — Technology</title>
+<style>
+  /* ============================================================
+     SLIDE 5 — TECHNOLOGY (iteration 5)
+     LEFT  — five-layer stack
+     RIGHT — generalizability:
+             - top: GENERALIZABILITY label + claim sentence
+             - middle: SVG-drawn bracket + STRAIGHT horizontal arrow
+                       with dots ON the arrow line and labels above
+     ============================================================ */
+
+  @font-face {
+    font-family: 'DIN Pro';
+    src: url('assets/fonts/DINPro-Light.ttf') format('truetype');
+    font-weight: 300;
+  }
+  @font-face {
+    font-family: 'DIN Pro';
+    src: url('assets/fonts/DINPro-Medium.ttf') format('truetype');
+    font-weight: 500;
+  }
+
+  :root {
+    --prometheus: #D91C5C;
+    --aquarius: #26A9E0;
+    --bg-charcoal: #1A1A1A;
+    --layer-surface: #222226;
+    --layer-border: rgba(240, 240, 240, 0.10);
+    --pure-white: #FFFFFF;
+    --off-white: #F0F0F0;
+    --body-white: #E8E8E8;
+    --label-grey: rgba(240, 240, 240, 0.55);
+    --body-grey: rgba(240, 240, 240, 0.85);
+    --rule-grey: rgba(240, 240, 240, 0.18);
+    --source-grey: rgba(240, 240, 240, 0.40);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+    font-family: 'DIN Pro', 'Helvetica Neue', sans-serif;
+  }
+
+  .slide {
+    position: relative;
+    width: 100vw;
+    height: 56.25vw;
+    max-height: 100vh;
+    max-width: 177.78vh;
+    margin: 0 auto;
+    overflow: hidden;
+    background-color: var(--bg-charcoal);
+    padding: 4% 7% 2.5% 7%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===== TEMPLATE: HEADER ===== */
+  .top-strip {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3.5vh;
+    flex-shrink: 0;
+  }
+
+  .top-strip .header-logo {
+    height: 4.0vw;
+    max-height: 64px;
+    width: auto;
+  }
+
+  .top-strip .section-label {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(16px, 1.5vw, 22px);
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--pure-white);
+  }
+
+  .headline-block {
+    text-align: center;
+    margin-bottom: 2.5vh;
+    flex-shrink: 0;
+  }
+
+  .slide-headline {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(30px, 3.0vw, 48px);
+    color: var(--pure-white);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    max-width: 92%;
+    margin: 0 auto;
+  }
+
+  .top-rule {
+    height: 3px;
+    background: linear-gradient(to right, var(--prometheus), var(--aquarius));
+    margin: 0 0 5vh;
+    flex-shrink: 0;
+  }
+
+  /* ===== BODY ===== */
+  .body {
+    flex: 1;
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    position: relative;
+    margin-bottom: 4vh;
+  }
+
+  /* ===== LEFT: stack ===== */
+  .panel-stack {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.0vh;
+    align-items: flex-start;
+    justify-content: center;
+    padding-right: 3vw;
+  }
+
+  .stack-layer {
+    background: var(--layer-surface);
+    border: 1px solid var(--layer-border);
+    border-radius: 6px;
+    padding: 0.7vh 1.4vw 0.7vh 0.9vw;
+    display: grid;
+    grid-template-columns: 7vw 7.5vw 1fr;
+    align-items: center;
+    gap: 1.2vw;
+    width: 44vw;
+    max-width: 720px;
+    min-height: 8vh;
+  }
+
+  .layer-image {
+    width: 100%;
+    aspect-ratio: 5 / 4;
+    max-height: 8vh;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .layer-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .layer-content {
+    /* No longer used — name and descriptor are now siblings in the grid */
+    display: contents;
+  }
+
+  .layer-name {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(24px, 2.15vw, 32px);
+    color: var(--pure-white);
+    line-height: 1.1;
+    letter-spacing: -0.005em;
+    align-self: center;
+    text-align: center;
+  }
+
+  .layer-descriptor {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 300;
+    font-size: clamp(14px, 1.15vw, 17px);
+    color: var(--body-grey);
+    line-height: 1.35;
+    align-self: center;
+    text-align: center;
+  }
+
+  /* ===== RIGHT: generalizability ===== */
+  .panel-roadmap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+    padding-left: 1.5vw;
+    padding-top: 0;
+  }
+
+  .roadmap-header {
+    text-align: center;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 0 1.5vw;
+  }
+
+  .roadmap-label {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(28px, 2.6vw, 37px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--pure-white);
+    margin-bottom: 1.92vh;
+    text-align: center;
+  }
+
+  .roadmap-claim {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(18px, 1.68vw, 24px);
+    color: var(--pure-white);
+    line-height: 1.3;
+    letter-spacing: -0.005em;
+    max-width: 95%;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  /* SVG overlay for everything: bracket + arrow + dots + labels */
+  .body-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+    overflow: visible;
+  }
+
+  /* Patent footnote */
+  .patent-footnote {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 400;
+    font-size: clamp(13px, 1.05vw, 16px);
+    color: var(--body-grey);
+    letter-spacing: 0.04em;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: auto;
+    padding-top: 1.6vh;
+    border-top: 1px solid var(--rule-grey);
+    flex-shrink: 0;
+  }
+
+  .footer-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(14px, 1.15vw, 18px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--off-white);
+  }
+
+  .footer-text .pipe {
+    display: inline-block;
+    margin: 0 0.7em;
+    color: rgba(240, 240, 240, 0.4);
+  }
+
+  @media print {
+    @page { size: 1920px 1080px; margin: 0; }
+    html, body { width: 1920px; height: 1080px; }
+    .slide { width: 1920px; height: 1080px; max-width: none; max-height: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+
+  <div class="top-strip">
+    <img src="assets/img/UB_Horisontal_Color.png" alt="Unicorn" class="header-logo">
+    <span class="section-label">Technology</span>
+  </div>
+
+  <div class="headline-block">
+    <h1 class="slide-headline">Our data factory is a five-layer, vertically integrated stack.</h1>
+  </div>
+
+  <div class="top-rule"></div>
+
+  <div class="body">
+
+    <!-- LEFT: stack -->
+    <div class="panel-stack">
+      <div class="stack-layer">
+        <div class="layer-image"><img src="assets/img/product/product_ai_layer_2.png" alt="AI layer"></div>
+        <div class="layer-content">
+          <div class="layer-name">AI</div>
+          <div class="layer-descriptor">Foundation models trained on Unicorn-generated biology data.</div>
+        </div>
+      </div>
+      <div class="stack-layer">
+        <div class="layer-image"><img src="assets/img/product/product_data_layer.png" alt="Data layer"></div>
+        <div class="layer-content">
+          <div class="layer-name">Data</div>
+          <div class="layer-descriptor">Reproducible, causally linked, multimodal datasets at industrial scale.</div>
+        </div>
+      </div>
+      <div class="stack-layer">
+        <div class="layer-image"><img src="assets/img/product/product_software_layer.jpg" alt="Software layer"></div>
+        <div class="layer-content">
+          <div class="layer-name">Software</div>
+          <div class="layer-descriptor">Unicorn Cloud control plane. Schedules, runs, and audits every experiment.</div>
+        </div>
+      </div>
+      <div class="stack-layer">
+        <div class="layer-image"><img src="assets/img/product/product_emmet.jpg" alt="Emmet robotics layer"></div>
+        <div class="layer-content">
+          <div class="layer-name">Robotics</div>
+          <div class="layer-descriptor">Purpose-built instruments for closed-loop, autonomous biology.</div>
+        </div>
+      </div>
+      <div class="stack-layer">
+        <div class="layer-image"><img src="assets/img/product/product_cells.jpg" alt="Cells reagents layer"></div>
+        <div class="layer-content">
+          <div class="layer-name">Reagents</div>
+          <div class="layer-descriptor">Characterized cell lines, validated media, purpose-matched consumables.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: header for generalizability section. Trajectory is drawn in SVG overlay. -->
+    <div class="panel-roadmap">
+      <div class="roadmap-header">
+        <div class="roadmap-label">Generalizability</div>
+        <div class="roadmap-claim">We will extend the stack across all of biology.</div>
+      </div>
+    </div>
+
+    <!-- SVG overlay: draws bracket, straight arrow, dots, and labels. -->
+    <svg class="body-overlay" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="bracketGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#D91C5C"/>
+          <stop offset="100%" stop-color="#26A9E0"/>
+        </linearGradient>
+        <linearGradient id="arrowGrad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1000" y2="0">
+          <stop offset="0%" stop-color="#80659E"/>
+          <stop offset="100%" stop-color="#26A9E0"/>
+        </linearGradient>
+      </defs>
+    </svg>
+
+    <div class="patent-footnote">Granted Patents: US 12,116,562 / 12,203,549 / 12,208,229</div>
+
+  </div>
+
+  <div class="footer">
+    <div class="footer-text">
+      <span>Unicorn Biotechnologies<span class="pipe">|</span>Investor Deck 2026</span>
+      <span>05 / 13</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function() {
+  const STOPS = [
+    { name: 'Cell biology', caption: 'Drug discovery', today: true },
+    { name: 'Tissue biology', caption: 'Bioengineered tissues, organs', today: false },
+    { name: 'Molecular biology', caption: 'RNA, protein engineering', today: false },
+    { name: 'Synthetic biology', caption: 'Biosensors, neural computing', today: false },
+    { name: 'Bioproduction', caption: 'Therapeutic manufacturing', today: false }
+  ];
+
+  function draw() {
+    const body = document.querySelector('.body');
+    const svg = document.querySelector('.body-overlay');
+    const layers = document.querySelectorAll('.stack-layer');
+    if (!layers.length || !body) return;
+
+    const bodyRect = body.getBoundingClientRect();
+    const firstLayerRect = layers[0].getBoundingClientRect();
+    const lastLayerRect = layers[layers.length - 1].getBoundingClientRect();
+
+    // Reference points (relative to body)
+    const stackRightX = firstLayerRect.right - bodyRect.left;
+    const stackTopY = firstLayerRect.top - bodyRect.top;
+    const stackBottomY = lastLayerRect.bottom - bodyRect.top;
+    const stackMidY = (stackTopY + stackBottomY) / 2;
+
+    // Bracket sits 14px right of stack edge
+    const bracketX = stackRightX + 14;
+
+    // Arrow geometry — STRAIGHT horizontal, all on the bracket midpoint Y
+    const arrowY = stackMidY;
+    const arrowStartX = bracketX;
+    const arrowEndX = bodyRect.width - 8;  // arrowhead tip near right edge
+    const arrowHeadSize = 21;  // original 14 + 50%
+    const arrowLineEndX = arrowEndX - arrowHeadSize;
+
+    // Distribute 5 dots evenly along the arrow segment.
+    // First, compute the natural even spacing
+    const stopCount = STOPS.length;
+    const naturalStart = arrowStartX + 60;
+    const naturalEnd = arrowLineEndX - 30;
+    const naturalGap = (naturalEnd - naturalStart) / (stopCount - 1);
+
+    // Then move the first dot rightward by half the natural gap so it's not crammed against the bracket
+    const dotZoneStart = naturalStart + (naturalGap / 2);
+    const dotZoneEnd = naturalEnd;
+    const dotXs = [];
+    for (let i = 0; i < stopCount; i++) {
+      const t = (i) / (stopCount - 1);
+      dotXs.push(dotZoneStart + (dotZoneEnd - dotZoneStart) * t);
+    }
+
+    // Set SVG to body's pixel dimensions
+    svg.setAttribute('width', bodyRect.width);
+    svg.setAttribute('height', bodyRect.height);
+    svg.setAttribute('viewBox', `0 0 ${bodyRect.width} ${bodyRect.height}`);
+
+    // Update gradient coordinates to span the actual arrow line
+    const grad = svg.querySelector('#arrowGrad');
+    if (grad) {
+      grad.setAttribute('x1', arrowStartX);
+      grad.setAttribute('x2', arrowLineEndX);
+    }
+
+    // Clear previous content (keep <defs>)
+    while (svg.children.length > 1) svg.removeChild(svg.lastChild);
+
+    const ns = 'http://www.w3.org/2000/svg';
+
+    // 1) BRACKET on right edge of stack
+    const bracket = document.createElementNS(ns, 'path');
+    bracket.setAttribute('d',
+      `M ${bracketX - 16} ${stackTopY}
+       L ${bracketX} ${stackTopY}
+       L ${bracketX} ${stackBottomY}
+       L ${bracketX - 16} ${stackBottomY}`);
+    bracket.setAttribute('stroke', 'url(#bracketGrad)');
+    bracket.setAttribute('stroke-width', '4');
+    bracket.setAttribute('fill', 'none');
+    bracket.setAttribute('stroke-linecap', 'round');
+    bracket.setAttribute('stroke-linejoin', 'round');
+    svg.appendChild(bracket);
+
+    // 2) STRAIGHT horizontal arrow line from bracket midpoint to arrowhead
+    const arrowLine = document.createElementNS(ns, 'line');
+    arrowLine.setAttribute('x1', arrowStartX);
+    arrowLine.setAttribute('y1', arrowY);
+    arrowLine.setAttribute('x2', arrowLineEndX);
+    arrowLine.setAttribute('y2', arrowY);
+    arrowLine.setAttribute('stroke', 'url(#arrowGrad)');
+    arrowLine.setAttribute('stroke-width', '4');
+    arrowLine.setAttribute('stroke-linecap', 'round');
+    svg.appendChild(arrowLine);
+
+    // 3) ARROWHEAD (cyan, matching the gradient end) — original +50%
+    const head = document.createElementNS(ns, 'polygon');
+    const headHalfHeight = 13;
+    head.setAttribute('points',
+      `${arrowEndX} ${arrowY}, ${arrowLineEndX} ${arrowY - headHalfHeight}, ${arrowLineEndX} ${arrowY + headHalfHeight}`);
+    head.setAttribute('fill', '#26A9E0');
+    svg.appendChild(head);
+
+    // 4) DOTS sitting ON the arrow line
+    STOPS.forEach((stop, i) => {
+      const x = dotXs[i];
+      if (stop.today) {
+        // Outer glow
+        const glow = document.createElementNS(ns, 'circle');
+        glow.setAttribute('cx', x);
+        glow.setAttribute('cy', arrowY);
+        glow.setAttribute('r', 13);
+        glow.setAttribute('fill', 'rgba(217, 28, 92, 0.20)');
+        svg.appendChild(glow);
+        // Solid dot
+        const dot = document.createElementNS(ns, 'circle');
+        dot.setAttribute('cx', x);
+        dot.setAttribute('cy', arrowY);
+        dot.setAttribute('r', 8);
+        dot.setAttribute('fill', '#D91C5C');
+        svg.appendChild(dot);
+      } else {
+        // Hollow dot
+        const dot = document.createElementNS(ns, 'circle');
+        dot.setAttribute('cx', x);
+        dot.setAttribute('cy', arrowY);
+        dot.setAttribute('r', 8);
+        dot.setAttribute('fill', '#1A1A1A');
+        dot.setAttribute('stroke', 'rgba(240, 240, 240, 0.55)');
+        dot.setAttribute('stroke-width', '2');
+        svg.appendChild(dot);
+      }
+    });
+
+    // 5) LABELS — alternate above/below the arrow line
+    const labelGapY = 50;       // gap from arrow line to first text line — was 38, +30%
+    const lineHeightY = 34;     // line spacing for wrapped name — was 26, +30%
+    const tagExtraY = 42;       // extra offset above name for TODAY tag — was 32, +30%
+    const fontSize = 26;        // capability name — was 20, +30%
+    const tagFontSize = 26;     // TODAY tag — was 20, +30%
+    const captionFontSize = 17; // market caption — was 13, +30%
+    const captionLineHeightY = 22;
+    const captionGapY = 10;     // gap between name and caption — was 8
+
+    STOPS.forEach((stop, i) => {
+      const x = dotXs[i];
+      // Even indices (0, 2, 4) ABOVE; odd indices (1, 3) BELOW — alternating
+      const isAbove = (i % 2 === 0);
+
+      // Name on single line (no wrapping)
+      const nameLines = [stop.name];
+
+      // Caption — single line (captions are short enough)
+      const captionLines = wrapCaption(stop.caption, 60);
+
+      // Track top and bottom of the entire label block (for connector line)
+      let blockTopY, blockBottomY;
+
+      if (isAbove) {
+        // Top-to-bottom order: TODAY tag → name → caption → arrow
+        // Caption is closest to arrow, then name, then TODAY tag
+
+        // Place caption first — closest to arrow
+        const captionClosestY = arrowY - labelGapY;
+        captionLines.forEach((line, idx) => {
+          const linesBelow = captionLines.length - 1 - idx;
+          const y = captionClosestY - linesBelow * captionLineHeightY;
+          drawText(svg, ns, x, y, line, captionFontSize, 'rgba(240, 240, 240, 0.65)');
+        });
+
+        const captionTopY = captionClosestY - (captionLines.length - 1) * captionLineHeightY;
+
+        // Place name above the caption
+        const nameStartY = captionTopY - captionFontSize * 0.85 - captionGapY;
+        nameLines.forEach((line, idx) => {
+          const linesBelow = nameLines.length - 1 - idx;
+          const y = nameStartY - linesBelow * lineHeightY;
+          drawText(svg, ns, x, y, line, fontSize, '#FFFFFF');
+        });
+
+        const nameTopY = nameStartY - (nameLines.length - 1) * lineHeightY;
+        blockTopY = nameTopY - fontSize * 0.85;
+        blockBottomY = captionClosestY + 4;
+      } else {
+        // Below: arrow → name (closest) → caption (further)
+        // Top-to-bottom order: arrow → name → caption
+        const nameClosestY = arrowY + labelGapY + fontSize * 0.7;
+        nameLines.forEach((line, idx) => {
+          const y = nameClosestY + idx * lineHeightY;
+          drawText(svg, ns, x, y, line, fontSize, '#FFFFFF');
+        });
+
+        const nameBottomY = nameClosestY + (nameLines.length - 1) * lineHeightY;
+
+        // Caption below the name
+        const captionStartY = nameBottomY + lineHeightY * 0.4 + captionGapY;
+        captionLines.forEach((line, idx) => {
+          const y = captionStartY + idx * captionLineHeightY;
+          drawText(svg, ns, x, y, line, captionFontSize, 'rgba(240, 240, 240, 0.65)');
+        });
+
+        blockTopY = nameClosestY - fontSize * 0.85;
+        blockBottomY = captionStartY + (captionLines.length - 1) * captionLineHeightY;
+      }
+
+      // Connector line from text block edge to dot
+      const connector = document.createElementNS(ns, 'line');
+      connector.setAttribute('x1', x);
+      connector.setAttribute('x2', x);
+      const dotEdgeOffset = 12;
+      if (isAbove) {
+        connector.setAttribute('y1', blockBottomY);
+        connector.setAttribute('y2', arrowY - dotEdgeOffset);
+      } else {
+        connector.setAttribute('y1', arrowY + dotEdgeOffset);
+        connector.setAttribute('y2', blockTopY);
+      }
+      connector.setAttribute('stroke', stop.today ? '#D91C5C' : 'rgba(240, 240, 240, 0.40)');
+      connector.setAttribute('stroke-width', '1.5');
+      svg.appendChild(connector);
+
+      // TODAY tag (only for today stop) — sits above the entire name+caption block
+      if (stop.today) {
+        const tag = document.createElementNS(ns, 'text');
+        tag.setAttribute('x', x);
+        const tagY = blockTopY - tagExtraY * 0.4;
+        tag.setAttribute('y', tagY);
+        tag.setAttribute('text-anchor', 'middle');
+        tag.setAttribute('fill', '#D91C5C');
+        tag.setAttribute('font-family', "'DIN Pro', 'Helvetica Neue', sans-serif");
+        tag.setAttribute('font-weight', '500');
+        tag.setAttribute('font-size', tagFontSize);
+        tag.setAttribute('letter-spacing', '4');
+        tag.textContent = 'TODAY';
+        svg.appendChild(tag);
+      }
+    });
+  }
+
+  // Helper: draw a centered text element
+  function drawText(svg, ns, x, y, content, fontSize, fill) {
+    const text = document.createElementNS(ns, 'text');
+    text.setAttribute('x', x);
+    text.setAttribute('y', y);
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('fill', fill);
+    text.setAttribute('font-family', "'DIN Pro', 'Helvetica Neue', sans-serif");
+    text.setAttribute('font-weight', '500');
+    text.setAttribute('font-size', fontSize);
+    text.textContent = content;
+    svg.appendChild(text);
+  }
+
+  // Helper: wrap caption text into N-char-ish lines on word boundaries
+  function wrapCaption(caption, maxCharsPerLine) {
+    const words = caption.split(' ');
+    const lines = [];
+    let current = '';
+    for (const w of words) {
+      if (current === '') {
+        current = w;
+      } else if ((current + ' ' + w).length <= maxCharsPerLine) {
+        current += ' ' + w;
+      } else {
+        lines.push(current);
+        current = w;
+      }
+    }
+    if (current) lines.push(current);
+    return lines;
+  }
+
+  if (document.readyState === 'complete') {
+    setTimeout(draw, 50);
+  } else {
+    window.addEventListener('load', () => setTimeout(draw, 50));
+  }
+  window.addEventListener('resize', draw);
+})();
+</script>
+
+</body>
+</html>

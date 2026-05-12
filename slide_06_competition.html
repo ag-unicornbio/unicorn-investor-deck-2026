@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Slide 6 — Competition</title>
+<style>
+  /* ============================================================
+     SLIDE 6 — COMPETITION (v4)
+     Per-card layout (4-row grid for vertical equidistance):
+       1. Top: image (left ~52%) | Gen X + dates + subtitle (right, centered)
+       2. Logos row (centered horizontally, evenly spaced)
+       3. Hairline divider
+       4. Analysis line (closer, centered, +30% size)
+     Cards are shorter — model-layer strip sits equidistant between
+     bottom of cards and footer hairline.
+     ============================================================ */
+
+  @font-face {
+    font-family: 'DIN Pro';
+    src: url('assets/fonts/DINPro-Light.ttf') format('truetype');
+    font-weight: 300;
+  }
+  @font-face {
+    font-family: 'DIN Pro';
+    src: url('assets/fonts/DINPro-Medium.ttf') format('truetype');
+    font-weight: 500;
+  }
+
+  :root {
+    --prometheus: #D91C5C;
+    --aquarius: #26A9E0;
+    --bg-charcoal: #1A1A1A;
+    --layer-surface: #222226;
+    --layer-border: rgba(240, 240, 240, 0.10);
+    --pure-white: #FFFFFF;
+    --off-white: #F0F0F0;
+    --body-white: #E8E8E8;
+    --label-grey: rgba(240, 240, 240, 0.55);
+    --body-grey: rgba(240, 240, 240, 0.85);
+    --rule-grey: rgba(240, 240, 240, 0.18);
+    --source-grey: rgba(240, 240, 240, 0.40);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+    font-family: 'DIN Pro', 'Helvetica Neue', sans-serif;
+    font-variant-ligatures: none;
+    font-feature-settings: "liga" 0, "clig" 0;
+  }
+
+  .slide {
+    position: relative;
+    width: 100vw;
+    height: 56.25vw;
+    max-height: 100vh;
+    max-width: 177.78vh;
+    margin: 0 auto;
+    overflow: hidden;
+    background-color: var(--bg-charcoal);
+    padding: 4% 7% 2.5% 7%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===== TEMPLATE: HEADER ===== */
+  .top-strip {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3.5vh;
+    flex-shrink: 0;
+  }
+
+  .top-strip .header-logo {
+    height: 4.0vw;
+    max-height: 64px;
+    width: auto;
+  }
+
+  .top-strip .section-label {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(16px, 1.5vw, 22px);
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--pure-white);
+  }
+
+  /* ===== TEMPLATE: HEADLINE ===== */
+  .headline-block {
+    text-align: center;
+    margin-bottom: 2.5vh;
+    flex-shrink: 0;
+  }
+
+  .slide-headline {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(28px, 2.8vw, 44px);
+    color: var(--pure-white);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    max-width: 96%;
+    margin: 0 auto;
+  }
+
+  .top-rule {
+    height: 3px;
+    background: linear-gradient(to right, var(--prometheus), var(--aquarius));
+    margin: 0 0 4vh;
+    flex-shrink: 0;
+  }
+
+  /* ===== BODY ===== */
+  .body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding-bottom: 1.6vh;
+  }
+
+  /* Model-layer strip — auto margins removed; space-evenly on parent handles spacing */
+  .model-layer-strip {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.4vw;
+    padding: 1.6vh 1.2vw;
+    border-top: 1px solid var(--rule-grey);
+    border-bottom: 1px solid var(--rule-grey);
+  }
+
+  /* ===== THREE COLUMNS (cards) ===== */
+  .gen-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    position: relative;
+  }
+
+  .gen-column {
+    padding: 1.6vh 1.4vw;
+    display: grid;
+    /* 5 rows: top / logos / 1fr filler / divider / closer.
+       The 1fr row absorbs leftover height so the divider + closer
+       always anchor to the bottom of the card. Cards are stretched
+       to equal height by the parent grid, so divider + closer line
+       up across all three columns regardless of top-section content. */
+    grid-template-rows: auto auto 1fr 1px auto;
+    row-gap: 2.2vh;
+    position: relative;
+  }
+
+  .gen-column .gen-top { grid-row: 1; }
+  .gen-column .gen-logos { grid-row: 2; }
+  .gen-column .gen-divider { grid-row: 4; }
+  .gen-column .gen-analysis { grid-row: 5; }
+
+  /* Column dividers between Gen 1/2 and Gen 2/3 */
+  .gen-column:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 6%;
+    bottom: 6%;
+    width: 1px;
+    background: var(--rule-grey);
+  }
+
+  /* Gen 3 emphasis: subtle Borealis gradient background fill */
+  .gen-column--gen3 {
+    background: linear-gradient(
+      to bottom,
+      rgba(217, 28, 92, 0.06),
+      rgba(38, 169, 224, 0.06)
+    );
+    border-radius: 6px;
+  }
+
+  /* ===== TOP ROW: image (left ~52%) | text block (right, centered) ===== */
+  .gen-top {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 1.2vw;
+    align-items: center;
+  }
+
+  .gen-image {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .gen-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* legacy placeholder text classes — left as no-ops for safety; not
+     rendered now that real images replace the labels */
+  .gen-image-label,
+  .gen-image-sub {
+    display: none;
+  }
+
+  .gen-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0.6vh;
+  }
+
+  .gen-tag {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(24px, 2.4vw, 36px);
+    line-height: 1;
+    letter-spacing: -0.005em;
+  }
+
+  .gen-column--gen1 .gen-tag { color: var(--label-grey); }
+  .gen-column--gen2 .gen-tag { color: var(--off-white); }
+  .gen-column--gen3 .gen-tag {
+    background: linear-gradient(to right, var(--prometheus), var(--aquarius));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gen-date {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 300;
+    font-size: clamp(11px, 1.0vw, 14px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .gen-column--gen1 .gen-date { color: var(--label-grey); }
+  .gen-column--gen2 .gen-date { color: var(--label-grey); }
+  .gen-column--gen3 .gen-date { color: var(--prometheus); }
+
+  .gen-title {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(15px, 1.3vw, 19px);
+    color: var(--off-white);
+    line-height: 1.25;
+    margin-top: 0.4vh;
+  }
+
+  .gen-column--gen1 .gen-title { color: var(--label-grey); }
+  .gen-column--gen3 .gen-title { color: var(--pure-white); }
+
+  /* ===== LOGOS ROW (centered horizontally, evenly spaced) ===== */
+  .gen-logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.6vw;
+    width: 100%;
+  }
+
+  .logo-placeholder {
+    /* Semi-transparent white pill — matches Slides 2/4/7 treatment.
+       28% charcoal bleed-through, soft 6px corners (proportionally
+       smaller than 8px since these pills are ~36px not ~64px tall). */
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 6px;
+    /* Tightened padding so the logo image fills more of the pill —
+       boosts perceived size without growing the box footprint. */
+    padding: 2px 4px;
+    /* FIXED width/height so the box doesn't grow to image native size. */
+    width: 6vw;
+    max-width: 90px;
+    height: 4vh;
+    max-height: 36px;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .logo-placeholder img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+  }
+
+  .logo-placeholder--unicorn {
+    /* Gen 3: drop the white pill — logo floats directly on the dark
+       slide bg, matching the chrome top-left treatment. This visually
+       distinguishes Unicorn from competitor logos in Gen 1/2. */
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    width: 11vw;
+    max-width: 160px;
+    height: 5.6vh;
+    max-height: 56px;
+  }
+
+  /* Wider slot for very-wide wordmark logos (e.g. Periodic Labs ~7:1)
+     so they don't collapse to a 12px-tall sliver when contained in
+     the standard 2.5:1 pill. Same height as default. */
+  .logo-placeholder--wide {
+    width: 9vw;
+    max-width: 130px;
+  }
+
+  /* ===== HAIRLINE DIVIDER (within each card) ===== */
+  .gen-divider {
+    height: 1px;
+    background: var(--rule-grey);
+    width: 100%;
+  }
+
+  .gen-column--gen3 .gen-divider {
+    background: rgba(217, 28, 92, 0.4);
+  }
+
+  /* ===== CLOSER LINE (analysis — center aligned, +30% size) ===== */
+  .gen-analysis {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(18px, 1.55vw, 23px);
+    line-height: 1.4;
+    text-align: center;
+    width: 100%;
+    /* Force one-line render across Gen 1/2/3 closer text per Jack 2026-05-04.
+       If the column is too narrow for any string, widen the column rather
+       than letting the text wrap — a wrapped closer breaks the visual
+       parallel between the three generations. */
+    white-space: nowrap;
+  }
+
+  .gen-column--gen1 .gen-analysis { color: var(--label-grey); }
+  .gen-column--gen2 .gen-analysis { color: var(--off-white); }
+  .gen-column--gen3 .gen-analysis { color: var(--pure-white); }
+
+  .model-layer-label {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(13px, 1.14vw, 17px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--aquarius);
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .model-layer-logos {
+    display: flex;
+    gap: 0.6vw;
+    flex: 0 0 auto;
+  }
+
+  .model-logo-placeholder {
+    /* Same pill treatment as competitor logos above (Slides 2/4/7 family). */
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 6px;
+    padding: 2px 4px;
+    /* FIXED width/height instead of min-* so the box doesn't grow to
+       the image's natural size when the image is much larger than the
+       intended slot. Image inside scales via object-fit: contain. */
+    width: 6.5vw;
+    max-width: 90px;
+    height: 4vh;
+    max-height: 36px;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .model-logo-placeholder img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* Wider slot for very-wide model-layer wordmarks (Chai is ~7.3:1).
+     Same height as default; just more horizontal room so the wordmark
+     is legible instead of contained-to-12px-tall. */
+  .model-logo-placeholder--wide {
+    width: 10vw;
+    max-width: 145px;
+  }
+
+  .model-layer-claim {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(17px, 1.44vw, 20px);
+    color: var(--pure-white);
+    line-height: 1.35;
+    flex: 0 0 auto;
+  }
+
+  /* ===== FOOTER (verbatim copy from locked Slide 2) ===== */
+  .footer {
+    padding-top: 1.6vh;
+    border-top: 1px solid var(--rule-grey);
+  }
+
+  .footer-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(14px, 1.15vw, 18px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--off-white);
+  }
+
+  .footer-text .pipe {
+    display: inline-block;
+    margin: 0 0.7em;
+    color: rgba(240, 240, 240, 0.4);
+  }
+
+  @media print {
+    @page { size: 1920px 1080px; margin: 0; }
+    html, body { width: 1920px; height: 1080px; }
+    .slide { width: 1920px; height: 1080px; max-width: none; max-height: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+
+  <!-- HEADER -->
+  <div class="top-strip">
+    <img src="assets/img/UB_Horisontal_Color.png" alt="Unicorn" class="header-logo">
+    <span class="section-label">Competition</span>
+  </div>
+
+  <!-- HEADLINE -->
+  <div class="headline-block">
+    <h1 class="slide-headline">You don't iterate on the candle to get the LED. You build the LED.</h1>
+  </div>
+
+  <div class="top-rule"></div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- Three generation columns -->
+    <div class="gen-columns">
+
+      <!-- Gen 1 -->
+      <div class="gen-column gen-column--gen1">
+        <div class="gen-top">
+          <div class="gen-image">
+            <img src="assets/img/competitor/competitor_emerald_lab.jpg" alt="Emerald Cloud Lab — robots on benches">
+          </div>
+          <div class="gen-text">
+            <span class="gen-tag">Gen 1</span>
+            <span class="gen-date">1995 – 2020</span>
+            <span class="gen-title">Automated labs</span>
+          </div>
+        </div>
+        <div class="gen-logos">
+          <div class="logo-placeholder"><img src="assets/img/logos/logo_symyx_transp.png" alt="Symyx Technologies"></div>
+          <div class="logo-placeholder"><img src="assets/img/logos/logo_emerald.png" alt="Emerald Cloud Lab"></div>
+          <div class="logo-placeholder"><img src="assets/img/logos/logo_strateos_framed.png" alt="Strateos"></div>
+        </div>
+        <div class="gen-divider"></div>
+        <div class="gen-analysis">The original vision. Limited by soft/hardware.</div>
+      </div>
+
+      <!-- Gen 2 -->
+      <div class="gen-column gen-column--gen2">
+        <div class="gen-top">
+          <div class="gen-image">
+            <img src="assets/img/competitor/competitor_medra.jpg" alt="Medra Lab — autonomous lab automation">
+          </div>
+          <div class="gen-text">
+            <span class="gen-tag">Gen 2</span>
+            <span class="gen-date">2015 – present</span>
+            <span class="gen-title">Autonomous labs</span>
+          </div>
+        </div>
+        <div class="gen-logos">
+          <div class="logo-placeholder"><img src="assets/img/logos/logo_ginkgo.png" alt="Ginkgo Bioworks"></div>
+          <div class="logo-placeholder"><img src="assets/img/logos/logo_medra.png" alt="Medra"></div>
+          <div class="logo-placeholder"><img src="assets/img/logos/logo_highres.webp" alt="HighRes Biosolutions"></div>
+        </div>
+        <div class="gen-divider"></div>
+        <div class="gen-analysis">New software, <span style="color: var(--label-grey);">same instruments.</span></div>
+      </div>
+
+      <!-- Gen 3 -->
+      <div class="gen-column gen-column--gen3">
+        <div class="gen-top">
+          <div class="gen-image">
+            <img src="assets/img/product/product_factory_floor.png" alt="Unicorn data factory — plan view">
+          </div>
+          <div class="gen-text">
+            <span class="gen-tag">Gen 3</span>
+            <span class="gen-date">2025 – present</span>
+            <span class="gen-title">Data factory</span>
+          </div>
+        </div>
+        <div class="gen-logos">
+          <div class="logo-placeholder logo-placeholder--unicorn"><img src="assets/img/UB_Horisontal_Color.png" alt="Unicorn Biotechnologies"></div>
+        </div>
+        <div class="gen-divider"></div>
+        <div class="gen-analysis">New software, instruments &amp; biology.</div>
+      </div>
+
+    </div>
+
+    <!-- Model-layer callout strip (now sits in flex-space-between gap) -->
+    <div class="model-layer-strip">
+      <span class="model-layer-label">Model layer</span>
+      <div class="model-layer-logos">
+        <div class="model-logo-placeholder"><img src="assets/img/logos/logo_anthropic.svg" alt="Anthropic"></div>
+        <div class="model-logo-placeholder"><img src="assets/img/logos/logo_openai.png" alt="OpenAI"></div>
+        <div class="model-logo-placeholder"><img src="assets/img/logos/logo_lila_transp.png" alt="Lila Sciences"></div>
+        <div class="model-logo-placeholder model-logo-placeholder--wide"><img src="assets/img/logos/logo_periodic_transp.png" alt="Periodic Labs"></div>
+      </div>
+      <div class="model-layer-claim">
+        They need the output of Gen 3 data factories to train AI × Bio models.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER (verbatim copy from locked Slide 2) -->
+  <div class="footer">
+    <div class="footer-text">
+      <span>Unicorn Biotechnologies<span class="pipe">|</span>Investor Deck 2026</span>
+      <span>06 / 13</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

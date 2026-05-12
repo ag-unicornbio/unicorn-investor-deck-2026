@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Unicorn Biotechnologies — Investor Deck — Live Preview</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 100%; height: 100%;
+    background: #000; overflow: hidden;
+    font-family: 'Helvetica Neue', sans-serif;
+  }
+  .stage {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: #000;
+    overflow: hidden;
+  }
+  /* Lock the iframe at the slides' tested viewport (1920x1080) so vw/vh inside
+     each slide always resolves the same. The wrap is scaled visually with
+     transform: scale() to fit the browser viewport. */
+  .frame-wrap {
+    width: 1920px;
+    height: 1080px;
+    flex: 0 0 auto;
+    transform-origin: center center;
+  }
+  .frame-wrap iframe,
+  .frame-wrap .placeholder {
+    width: 1920px;
+    height: 1080px;
+    border: 0;
+    display: block;
+    background: #1A1A1A;
+  }
+  .placeholder {
+    color: rgba(240, 240, 240, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .nav-chrome {
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 10;
+    transition: opacity 0.3s ease;
+  }
+  .nav-chrome.hidden { opacity: 0; }
+  .counter {
+    position: absolute; bottom: 24px; left: 50%;
+    transform: translateX(-50%);
+    background: rgba(20, 20, 24, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(240, 240, 240, 0.12);
+    border-radius: 999px;
+    padding: 10px 18px;
+    color: #f0f0f0;
+    font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase;
+    font-weight: 500;
+    pointer-events: auto;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .counter .pos { color: #ffffff; }
+  .counter .total { color: rgba(240, 240, 240, 0.5); }
+  .counter .title {
+    color: rgba(240, 240, 240, 0.7);
+    border-left: 1px solid rgba(240, 240, 240, 0.18);
+    padding-left: 12px;
+    font-size: 11px; letter-spacing: 0.14em;
+  }
+  .nav-btn {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 48px; height: 48px;
+    background: rgba(20, 20, 24, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(240, 240, 240, 0.12);
+    border-radius: 50%;
+    color: rgba(240, 240, 240, 0.85);
+    font-size: 22px; line-height: 1;
+    cursor: pointer; pointer-events: auto;
+    display: flex; align-items: center; justify-content: center;
+    user-select: none;
+  }
+  .nav-btn:hover { background: rgba(20, 20, 24, 0.85); color: #ffffff; }
+  .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .nav-prev { left: 24px; }
+  .nav-next { right: 24px; }
+  .hint {
+    position: absolute; top: 24px; left: 50%;
+    transform: translateX(-50%);
+    background: rgba(217, 28, 92, 0.15);
+    border: 1px solid rgba(217, 28, 92, 0.4);
+    border-radius: 999px;
+    padding: 8px 16px;
+    color: #ffffff;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    pointer-events: none;
+    transition: opacity 0.4s ease 2s;
+  }
+  .hint.faded { opacity: 0; }
+  .reload-pill {
+    position: absolute; bottom: 24px; right: 24px;
+    background: rgba(20, 20, 24, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(240, 240, 240, 0.12);
+    border-radius: 999px;
+    padding: 8px 14px;
+    color: rgba(240, 240, 240, 0.7);
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    cursor: pointer; pointer-events: auto;
+    user-select: none;
+  }
+  .reload-pill:hover { color: #fff; border-color: rgba(240, 240, 240, 0.35); }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="frame-wrap" id="frameWrap">
+    <iframe id="slideFrame" src="slide_01_title.html"></iframe>
+  </div>
+</div>
+
+<div class="nav-chrome" id="navChromeEl">
+  <button class="nav-btn nav-prev" id="prev">‹</button>
+  <button class="nav-btn nav-next" id="next">›</button>
+  <div class="counter">
+    <span class="pos" id="pos">1</span><span class="total">/ 13</span>
+    <span class="title" id="title">Title</span>
+  </div>
+  <div class="reload-pill" id="reload" title="Reload current slide (R)">↻ reload</div>
+</div>
+
+<div class="hint" id="hint">← → arrows · F fullscreen · R reload</div>
+
+<script>
+(function() {
+  const SLIDES = [
+    { file: 'slide_01_title.html',             title: 'Title' },
+    { file: 'slide_02_why_now.html',           title: 'Why Now' },
+    { file: 'slide_03_problem.html',           title: 'The Problem' },
+    { file: 'slide_04_solution.html',          title: 'The Solution' },
+    { file: 'slide_05_technology.html',        title: 'Technology' },
+    { file: 'slide_06_competition.html',       title: 'Competition' },
+    { file: 'slide_07_traction.html',          title: 'Traction' },
+    { file: 'slide_08_why_adam_and_jack.html', title: 'Why Adam & Jack' },
+    { file: 'slide_09_business_model.html',    title: 'Business Model' },
+    { file: 'slide_10_market.html',            title: 'Market' },
+    { file: 'slide_11_team.html',              title: 'Team' },
+    { file: 'slide_12_the_ask.html',           title: 'The Ask' },
+    { file: 'slide_13_closer.html',            title: 'Closer' }
+  ];
+
+  const total = SLIDES.length;
+  let idx = 0;
+
+  const frameWrap = document.getElementById('frameWrap');
+  const pos = document.getElementById('pos');
+  const titleEl = document.getElementById('title');
+  const prevBtn = document.getElementById('prev');
+  const nextBtn = document.getElementById('next');
+  const reloadBtn = document.getElementById('reload');
+  const hint = document.getElementById('hint');
+  const navChromeEl = document.getElementById('navChromeEl');
+
+  function rescale() {
+    // Fit the locked-1920x1080 frame-wrap into the actual browser viewport
+    // while preserving its internal pixel space.
+    const sx = window.innerWidth / 1920;
+    const sy = window.innerHeight / 1080;
+    const s = Math.min(sx, sy);
+    frameWrap.style.transform = 'scale(' + s + ')';
+  }
+
+  function show(n) {
+    n = Math.max(0, Math.min(total - 1, n));
+    idx = n;
+    const s = SLIDES[idx];
+
+    // Replace frame-wrap content based on whether HTML exists.
+    // The wrap stays locked at 1920x1080; only its child changes.
+    frameWrap.innerHTML = '';
+    if (s.file) {
+      const iframe = document.createElement('iframe');
+      iframe.id = 'slideFrame';
+      // Cache-bust on every nav so live edits show without manual refresh.
+      iframe.src = s.file + '?_=' + Date.now();
+      frameWrap.appendChild(iframe);
+    } else {
+      const ph = document.createElement('div');
+      ph.className = 'placeholder';
+      ph.textContent = 'Slide ' + String(idx + 1).padStart(2, '0') + ' — not yet built';
+      frameWrap.appendChild(ph);
+    }
+
+    pos.textContent = idx + 1;
+    titleEl.textContent = s.title;
+    prevBtn.disabled = (idx === 0);
+    nextBtn.disabled = (idx === total - 1);
+  }
+
+  function reload() {
+    const s = SLIDES[idx];
+    if (!s.file) return;
+    const iframe = document.getElementById('slideFrame');
+    if (iframe) iframe.src = s.file + '?_=' + Date.now();
+  }
+
+  window.addEventListener('resize', rescale);
+  rescale();
+
+  function nextSlide() { show(idx + 1); }
+  function prevSlide() { show(idx - 1); }
+
+  prevBtn.addEventListener('click', prevSlide);
+  nextBtn.addEventListener('click', nextSlide);
+  reloadBtn.addEventListener('click', reload);
+
+  document.addEventListener('keydown', (e) => {
+    switch (e.key) {
+      case 'ArrowRight': case 'PageDown': case ' ':
+        e.preventDefault(); nextSlide(); break;
+      case 'ArrowLeft': case 'PageUp':
+        e.preventDefault(); prevSlide(); break;
+      case 'Home':
+        e.preventDefault(); show(0); break;
+      case 'End':
+        e.preventDefault(); show(total - 1); break;
+      case 'r': case 'R':
+        e.preventDefault(); reload(); break;
+      case 'f': case 'F':
+        if (document.fullscreenElement) document.exitFullscreen();
+        else document.documentElement.requestFullscreen();
+        break;
+    }
+  });
+
+  setTimeout(() => hint.classList.add('faded'), 100);
+  setTimeout(() => { hint.style.display = 'none'; }, 3500);
+
+  let chromeTimer;
+  function showChrome() {
+    navChromeEl.classList.remove('hidden');
+    clearTimeout(chromeTimer);
+    chromeTimer = setTimeout(() => navChromeEl.classList.add('hidden'), 3000);
+  }
+  document.addEventListener('mousemove', showChrome);
+  document.addEventListener('keydown', showChrome);
+  showChrome();
+
+  // First render
+  show(0);
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Slide 4 — Solution</title>
+<style>
+  /* ============================================================
+     SLIDE 4 — SOLUTION (the thesis monument)
+     The headline IS the visual. No diagram, no photo, no chart.
+     Three-beat thesis, three supporting lines, logo row.
+     ============================================================ */
+
+  @font-face {
+    font-family: 'DIN Pro';
+    src: url('assets/fonts/DINPro-Light.ttf') format('truetype');
+    font-weight: 300;
+  }
+  @font-face {
+    font-family: 'DIN Pro';
+    src: url('assets/fonts/DINPro-Medium.ttf') format('truetype');
+    font-weight: 500;
+  }
+
+  :root {
+    --prometheus: #D91C5C;
+    --aquarius: #26A9E0;
+    --bg-charcoal: #1A1A1A;
+    --pure-white: #FFFFFF;
+    --off-white: #F0F0F0;
+    --body-white: #E8E8E8;
+    --label-grey: rgba(240, 240, 240, 0.55);
+    --body-grey: rgba(240, 240, 240, 0.85);
+    --rule-grey: rgba(240, 240, 240, 0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+    font-family: 'DIN Pro', 'Helvetica Neue', sans-serif;
+  }
+
+  .slide {
+    position: relative;
+    width: 100vw;
+    height: 56.25vw;
+    max-height: 100vh;
+    max-width: 177.78vh;
+    margin: 0 auto;
+    overflow: hidden;
+    background-color: var(--bg-charcoal);
+    padding: 4% 7% 2.5% 7%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===== TEMPLATE: HEADER ===== */
+  .top-strip {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3.5vh;
+  }
+
+  .top-strip .header-logo {
+    height: 4.0vw;
+    max-height: 64px;
+    width: auto;
+  }
+
+  .top-strip .section-label {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(16px, 1.5vw, 22px);
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--pure-white);
+  }
+
+  /* Borealis gradient rule below header strip — template chrome */
+  .top-rule {
+    height: 3px;
+    background: linear-gradient(to right, var(--prometheus), var(--aquarius));
+    margin: 0 0 4vh;
+  }
+
+  /* ===== THESIS MONUMENT ===== */
+  .body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .thesis {
+    margin-top: auto;
+    margin-bottom: auto;
+    transform: translateY(-2vh);
+  }
+
+  .thesis-line {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(56px, 6.5vw, 108px);
+    color: var(--off-white);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.6vh;
+  }
+
+  /* Borealis gradient on the key nouns */
+  .gradient-word {
+    background: linear-gradient(to right, var(--prometheus), var(--aquarius));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    font-weight: 500;
+  }
+
+  /* Print fallback: some PDF readers (notably GDrive's web viewer) don't
+     respect background-clip:text and end up rendering the gradient as a
+     solid rectangle behind the (transparent) text. Override to a solid
+     Prometheus pink for the print path so the gradient words still read
+     as emphasized but without the box artifact. */
+  @media print {
+    .gradient-word {
+      background: none !important;
+      -webkit-background-clip: unset !important;
+      background-clip: unset !important;
+      -webkit-text-fill-color: var(--prometheus) !important;
+      color: var(--prometheus) !important;
+    }
+  }
+
+  /* ===== SUPPORTING DIMENSIONS ===== */
+  .supporting {
+    margin-bottom: 5vh;
+  }
+
+  .support-line {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 300;
+    font-size: clamp(20px, 1.8vw, 28px);
+    color: var(--body-grey);
+    line-height: 1.4;
+    letter-spacing: 0;
+    margin-bottom: 0.8vh;
+  }
+
+  .support-line:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ===== DIVIDER ABOVE LOGO ROW ===== */
+  .claim-proof-divider {
+    height: 2px;
+    background: linear-gradient(to right, var(--prometheus), var(--aquarius));
+    margin-bottom: 4vh;
+    opacity: 0.6;
+  }
+
+  /* ===== LOGO ROW ===== */
+  .logo-row-section {
+    margin-bottom: 8vh;
+  }
+
+  .logo-row-label {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(17px, 1.5vw, 22px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--pure-white);
+    margin-bottom: 3.2vh;
+  }
+
+  .logo-row {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.2vw;
+  }
+
+  .logo-placeholder {
+    flex: 1 1 0;
+    height: 5.5vh;
+    min-height: 44px;
+    max-height: 64px;
+    /* Semi-transparent white pill — matches Slide 2 treatment.
+       ~28% charcoal bleed-through, soft 8px corners, tighter padding. */
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 8px;
+    padding: 4px 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .logo-placeholder img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* ===== TEMPLATE: FOOTER ===== */
+  .footer {
+    margin-top: auto;
+    padding-top: 1.6vh;
+    border-top: 1px solid var(--rule-grey);
+  }
+
+  .footer-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(14px, 1.15vw, 18px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--off-white);
+  }
+
+  .footer-text .pipe {
+    display: inline-block;
+    margin: 0 0.7em;
+    color: rgba(240, 240, 240, 0.4);
+  }
+
+  @media print {
+    @page { size: 1920px 1080px; margin: 0; }
+    html, body { width: 1920px; height: 1080px; }
+    .slide { width: 1920px; height: 1080px; max-width: none; max-height: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+
+  <!-- TEMPLATE: HEADER -->
+  <div class="top-strip">
+    <img src="assets/img/UB_Horisontal_Color.png" alt="Unicorn" class="header-logo">
+    <span class="section-label">The Solution</span>
+  </div>
+
+  <div class="top-rule"></div>
+
+  <!-- THESIS + SUPPORTING + LOGOS -->
+  <div class="body">
+
+    <!-- Three-beat thesis -->
+    <div class="thesis">
+      <div class="thesis-line">We build the <span class="gradient-word">tools</span>.</div>
+      <div class="thesis-line">The tools make the <span class="gradient-word">data</span>.</div>
+      <div class="thesis-line">The data builds the <span class="gradient-word">future</span>.</div>
+    </div>
+
+    <!-- Logo row with label -->
+    <div class="logo-row-section">
+      <div class="logo-row-label">Already shipping</div>
+      <div class="logo-row">
+        <div class="logo-placeholder"><img src="assets/img/logos/logo_astrazeneca_framed.png" alt="AstraZeneca"></div>
+        <div class="logo-placeholder"><img src="assets/img/logos/logo_bayer_transp.png" alt="Bayer"></div>
+        <div class="logo-placeholder"><img src="assets/img/logos/logo_ginkgo.png" alt="Ginkgo Bioworks"></div>
+        <div class="logo-placeholder"><img src="assets/img/logos/logo_uppsala_transp.png" alt="University of Uppsala"></div>
+        <div class="logo-placeholder"><img src="assets/img/logos/logo_sheffield.png" alt="University of Sheffield"></div>
+        <div class="logo-placeholder"><img src="assets/img/logos/logo_darpa.png" alt="DARPA"></div>
+        <div class="logo-placeholder"><img src="assets/img/logos/logo_ukri_transp.png" alt="UKRI"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TEMPLATE: FOOTER -->
+  <div class="footer">
+    <div class="footer-text">
+      <span>Unicorn Biotechnologies<span class="pipe">|</span>Investor Deck 2026</span>
+      <span>04 / 13</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Slide 2 — Why Now</title>
+<style>
+  /* ============================================================
+     SLIDE 2 — WHY NOW (iteration 5)
+     Three cards. Each card:
+       - Header (centred, big) at top
+       - Subtitle (one-sentence summary) below header
+       - Bottom half: three single-line deal rectangles, equidistant
+       - Padding mirrored top/bottom, ends above footer hairline
+     ============================================================ */
+
+  @font-face {
+    font-family: 'DIN Pro';
+    src: url('assets/fonts/DINPro-Light.ttf') format('truetype');
+    font-weight: 300;
+  }
+  @font-face {
+    font-family: 'DIN Pro';
+    src: url('assets/fonts/DINPro-Medium.ttf') format('truetype');
+    font-weight: 500;
+  }
+
+  :root {
+    --prometheus: #D91C5C;
+    --aquarius: #26A9E0;
+    --bg-charcoal: #1A1A1A;
+    --card-surface: #222226;
+    --card-border: rgba(240, 240, 240, 0.10);
+    --deal-surface: rgba(255, 255, 255, 0.04);
+    --deal-border: rgba(240, 240, 240, 0.14);
+    --pure-white: #FFFFFF;
+    --off-white: #F0F0F0;
+    --body-white: #E8E8E8;
+    --label-grey: rgba(240, 240, 240, 0.55);
+    --body-grey: rgba(240, 240, 240, 0.85);
+    --rule-grey: rgba(240, 240, 240, 0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+    font-family: 'DIN Pro', 'Helvetica Neue', sans-serif;
+  }
+
+  .slide {
+    position: relative;
+    width: 100vw;
+    height: 56.25vw;
+    max-height: 100vh;
+    max-width: 177.78vh;
+    margin: 0 auto;
+    overflow: hidden;
+    background-color: var(--bg-charcoal);
+    padding: 4% 7% 2.5% 7%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===== TEMPLATE: HEADER ===== */
+  .top-strip {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3.5vh;
+  }
+
+  .top-strip .header-logo {
+    height: 4.0vw;
+    max-height: 64px;
+    width: auto;
+  }
+
+  .top-strip .section-label {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(16px, 1.5vw, 22px);
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--pure-white);
+  }
+
+  /* ===== TEMPLATE: HEADLINE ===== */
+  .headline-block {
+    text-align: center;
+    margin-bottom: 2.5vh;
+  }
+
+  .slide-headline {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(30px, 3.0vw, 48px);
+    color: var(--pure-white);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    max-width: 92%;
+    margin: 0 auto;
+  }
+
+  .top-rule {
+    height: 3px;
+    background: linear-gradient(to right, var(--prometheus), var(--aquarius));
+    margin: 0;
+  }
+
+  /* ===== BODY: three cards.
+     Body fills space between rule and footer; cards centred vertically. */
+  .body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2.4%;
+  }
+
+  /* Card: header zone (claim+subtitle) at top, deals zone below.
+     Card height is content-driven, not stretched, with a gap between
+     subtitle and deals zone. Three deals are tight together. */
+  .card {
+    background: var(--card-surface);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 4vh 1.4vw;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Top region — claim + subtitle.
+     Fixed min-height so deal blocks align horizontally across all 3 columns. */
+  .card-top {
+    text-align: center;
+    margin-bottom: 3vh;
+    min-height: 16vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .card-claim {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(28px, 2.7vw, 38px);
+    color: var(--pure-white);
+    line-height: 1.18;
+    letter-spacing: -0.005em;
+    margin-bottom: 3.6vh;
+  }
+
+  .card-subtitle {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 300;
+    font-size: clamp(19px, 1.7vw, 24px);
+    color: var(--body-white);
+    line-height: 1.4;
+    max-width: 95%;
+    margin: 0 auto;
+  }
+
+  /* Bottom region — three deals stacked tightly together */
+  .deals {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8vh;
+  }
+
+  .deal {
+    background: var(--deal-surface);
+    border: 1px solid var(--deal-border);
+    border-radius: 6px;
+    padding: 1.4vh 0.9vw;
+    display: flex;
+    align-items: center;
+    gap: 0.4vw;
+    min-height: 6vh;
+  }
+
+  /* FIXED-WIDTH logo containers — same size every row.
+     White pill background so dark-on-light logos (NVIDIA, Pfizer, etc.)
+     render correctly against the dark slide. Standard dark-deck pattern. */
+  .deal .logo-box {
+    flex: 0 0 5.6vw;
+    max-width: 90px;
+    height: 3.6vh;
+    min-height: 28px;
+    /* Semi-transparent white pill — charcoal bleeds through to ~28%,
+       making the pill feel integrated with the slide. Softer corners
+       and tighter padding so logos fill more of the pill area. */
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 5px;
+    padding: 2px 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .deal .logo-box img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+  }
+
+  .deal .logo-x {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 300;
+    font-size: clamp(13px, 1.1vw, 16px);
+    color: var(--label-grey);
+    flex-shrink: 0;
+  }
+
+  .deal .deal-text {
+    flex: 1;
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(13px, 1.15vw, 16px);
+    color: var(--body-white);
+    line-height: 1.25;
+    letter-spacing: -0.005em;
+    margin-left: 0.25vw;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .deal .deal-text .em-dash {
+    color: var(--label-grey);
+    margin-right: 0.3em;
+  }
+
+  /* Single-logo treatment for card 3 */
+  .deal--single .logo-box {
+    flex: 0 0 7.5vw;
+    max-width: 120px;
+  }
+
+  /* ===== TEMPLATE: FOOTER ===== */
+  .footer {
+    padding-top: 1.6vh;
+    border-top: 1px solid var(--rule-grey);
+  }
+
+  .footer-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(14px, 1.15vw, 18px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--off-white);
+  }
+
+  .footer-text .pipe {
+    display: inline-block;
+    margin: 0 0.7em;
+    color: rgba(240, 240, 240, 0.4);
+  }
+
+  @media print {
+    @page { size: 1920px 1080px; margin: 0; }
+    html, body { width: 1920px; height: 1080px; }
+    .slide { width: 1920px; height: 1080px; max-width: none; max-height: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+
+  <div class="top-strip">
+    <img src="assets/img/UB_Horisontal_Color.png" alt="Unicorn" class="header-logo">
+    <span class="section-label">Why Now</span>
+  </div>
+
+  <div class="headline-block">
+    <h1 class="slide-headline">AI × Bio is here. &gt;$5B inflows in &lt;90 days</h1>
+  </div>
+
+  <div class="top-rule"></div>
+
+  <div class="body">
+    <div class="cards">
+
+      <!-- CARD 1: Pharma is buying AI -->
+      <div class="card">
+        <div class="card-top">
+          <div class="card-claim">Pharma is buying AI</div>
+          <div class="card-subtitle">Biopharmaceutical companies are paying AI labs to make new therapeutics</div>
+        </div>
+        <div class="deals">
+
+          <div class="deal">
+            <div class="logo-box"><img src="assets/img/logos/logo_lilly.png" alt="Lilly"></div>
+            <span class="logo-x">×</span>
+            <div class="logo-box"><img src="assets/img/logos/logo_insilico.png" alt="Insilico Medicine"></div>
+            <div class="deal-text"><span class="em-dash">—</span>$2.75B, March '26</div>
+          </div>
+
+          <div class="deal">
+            <div class="logo-box"><img src="assets/img/logos/logo_pfizer.png" alt="Pfizer"></div>
+            <span class="logo-x">×</span>
+            <div class="logo-box"><img src="assets/img/logos/logo_boltz.svg" alt="Boltz"></div>
+            <div class="deal-text"><span class="em-dash">—</span>Multi-year R&amp;D pact, Jan '26</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CARD 2: AI is buying pharma -->
+      <div class="card">
+        <div class="card-top">
+          <div class="card-claim">AI is buying pharma</div>
+          <div class="card-subtitle">AI labs are buying their way into wet biology</div>
+        </div>
+        <div class="deals">
+
+          <div class="deal">
+            <div class="logo-box"><img src="assets/img/logos/logo_nvidia_transp.png" alt="NVIDIA"></div>
+            <span class="logo-x">×</span>
+            <div class="logo-box"><img src="assets/img/logos/logo_lilly.png" alt="Lilly"></div>
+            <div class="deal-text"><span class="em-dash">—</span>$1B AI lab, Jan '26</div>
+          </div>
+
+          <div class="deal">
+            <div class="logo-box"><img src="assets/img/logos/logo_anthropic.svg" alt="Anthropic"></div>
+            <span class="logo-x">×</span>
+            <div class="logo-box"><img src="assets/img/logos/logo_coefficient_transp.png" alt="Coefficient Bio"></div>
+            <div class="deal-text"><span class="em-dash">—</span>$400M acquisition, April '26</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CARD 3: AI × bio is a national priority -->
+      <div class="card">
+        <div class="card-top">
+          <div class="card-claim">Public capital deploying</div>
+          <div class="card-subtitle">Governments and institutions are funding the infrastructure</div>
+        </div>
+        <div class="deals">
+
+          <div class="deal deal--single">
+            <div class="logo-box"><img src="assets/img/logos/logo_czi_transp.png" alt="Chan Zuckerberg Initiative"></div>
+            <div class="deal-text"><span class="em-dash">—</span>Virtual Cells, $500M, Apr '26</div>
+          </div>
+
+          <div class="deal deal--single">
+            <div class="logo-box"><img src="assets/img/logos/logo_arpah.svg" alt="ARPA-H"></div>
+            <div class="deal-text"><span class="em-dash">—</span>IGoR programme, $150M, May '26</div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-text">
+      <span>Unicorn Biotechnologies<span class="pipe">|</span>Investor Deck 2026</span>
+      <span>02 / 13</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

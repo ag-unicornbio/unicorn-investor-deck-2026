@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Slide 3 — Problem</title>
+<style>
+  /* ============================================================
+     SLIDE 3 — PROBLEM
+     Two-panel body:
+       LEFT  — 2x2 grid: 1950s computer / 2026 computer
+                          1950s biology bench / 2026 biology bench
+               (top row shows transformation, bottom row shows stasis)
+       RIGHT — three big-number reproducibility stats, vertical stack
+     Headline + sub-headline up top.
+     Sub-headline does the rhetorical closing — no separate punchline.
+     ============================================================ */
+
+  @font-face {
+    font-family: 'DIN Pro';
+    src: url('assets/fonts/DINPro-Light.ttf') format('truetype');
+    font-weight: 300;
+  }
+  @font-face {
+    font-family: 'DIN Pro';
+    src: url('assets/fonts/DINPro-Medium.ttf') format('truetype');
+    font-weight: 500;
+  }
+
+  :root {
+    --prometheus: #D91C5C;
+    --aquarius: #26A9E0;
+    --bg-charcoal: #1A1A1A;
+    --panel-surface: #222226;
+    --panel-border: rgba(240, 240, 240, 0.10);
+    --true-black: #0A0A0A;
+    --pure-white: #FFFFFF;
+    --off-white: #F0F0F0;
+    --body-white: #E8E8E8;
+    --label-grey: rgba(240, 240, 240, 0.55);
+    --body-grey: rgba(240, 240, 240, 0.85);
+    --rule-grey: rgba(240, 240, 240, 0.18);
+    --source-grey: rgba(240, 240, 240, 0.40);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+    font-family: 'DIN Pro', 'Helvetica Neue', sans-serif;
+  }
+
+  .slide {
+    position: relative;
+    width: 100vw;
+    height: 56.25vw;
+    max-height: 100vh;
+    max-width: 177.78vh;
+    margin: 0 auto;
+    overflow: hidden;
+    background-color: var(--bg-charcoal);
+    padding: 4% 7% 2.5% 7%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===== TEMPLATE: HEADER ===== */
+  .top-strip {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3.5vh;
+  }
+
+  .top-strip .header-logo {
+    height: 4.0vw;
+    max-height: 64px;
+    width: auto;
+  }
+
+  .top-strip .section-label {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(16px, 1.5vw, 22px);
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--pure-white);
+  }
+
+  /* HEADLINE */
+  .headline-block {
+    text-align: center;
+    margin-bottom: 2.5vh;
+  }
+
+  .slide-headline {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(30px, 3.0vw, 48px);
+    color: var(--pure-white);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    max-width: 92%;
+    margin: 0 auto;
+  }
+
+  .top-rule {
+    height: 3px;
+    background: linear-gradient(to right, var(--prometheus), var(--aquarius));
+    margin: 0 0 7vh;
+  }
+
+  /* ===== BODY: two panels, equal halves ===== */
+  .body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 4vh;
+  }
+
+  .panels {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  /* ===== LEFT PANEL: 2x2 grid centred in left half ===== */
+  .panel-left {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2vh 2vw;
+  }
+
+  .grid-2x2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 1.6vh;
+    width: 100%;
+    height: 100%;
+    max-width: 640px;
+    max-height: 480px;
+    aspect-ratio: 4 / 3;
+  }
+
+  .grid-cell {
+    background: var(--panel-surface);
+    border: 1px solid var(--panel-border);
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Image fills the entire cell */
+  .grid-cell-image {
+    position: absolute;
+    inset: 0;
+    margin: 4px;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .grid-cell-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Year tag in the corner of each cell */
+  .grid-cell-era {
+    position: absolute;
+    top: 1vh;
+    left: 0.8vw;
+    z-index: 2;
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(14px, 1.2vw, 18px);
+    letter-spacing: 0.16em;
+    color: var(--pure-white);
+    background: rgba(20, 20, 24, 0.7);
+    padding: 0.3vh 0.6vw;
+    border-radius: 3px;
+    backdrop-filter: blur(6px);
+  }
+
+  /* ===== RIGHT PANEL: stats + bold claim ===== */
+  .panel-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 2vh 2vw 2vh 3vw;
+    gap: 6.5vh;
+  }
+
+  .stats {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 5.2vh;
+    flex: 0 0 auto;
+  }
+
+  .stat {
+    padding: 0;
+  }
+
+  .stat-number {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(40px, 4.4vw, 72px);
+    color: var(--prometheus);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.0vh;
+  }
+
+  .stat-caption {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(17px, 1.5vw, 22px);
+    color: var(--body-white);
+    line-height: 1.3;
+    margin-bottom: 0.6vh;
+    max-width: 95%;
+  }
+
+  .stat-source {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 300;
+    font-size: clamp(12px, 1.05vw, 15px);
+    color: var(--source-grey);
+    line-height: 1.3;
+    letter-spacing: 0.02em;
+  }
+
+  /* The closing claim — bold, big, pops off the screen, centred */
+  .closing-claim {
+    border-top: 1px solid var(--rule-grey);
+    padding-top: 1.6vh;
+    margin-top: 0;
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(28px, 2.65vw, 36px);
+    color: var(--pure-white);
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    text-align: center;
+  }
+
+  /* ===== TEMPLATE: FOOTER ===== */
+  .footer {
+    margin-top: auto;
+    padding-top: 1.6vh;
+    border-top: 1px solid var(--rule-grey);
+  }
+
+  .footer-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(14px, 1.15vw, 18px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--off-white);
+  }
+
+  .footer-text .pipe {
+    display: inline-block;
+    margin: 0 0.7em;
+    color: rgba(240, 240, 240, 0.4);
+  }
+
+  @media print {
+    @page { size: 1920px 1080px; margin: 0; }
+    html, body { width: 1920px; height: 1080px; }
+    .slide { width: 1920px; height: 1080px; max-width: none; max-height: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+
+  <!-- TEMPLATE: HEADER -->
+  <div class="top-strip">
+    <img src="assets/img/UB_Horisontal_Color.png" alt="Unicorn" class="header-logo">
+    <span class="section-label">The Problem</span>
+  </div>
+
+  <!-- HEADLINE -->
+  <div class="headline-block">
+    <h1 class="slide-headline">AI needs reliable biological training data. That data doesn't exist.</h1>
+  </div>
+
+  <div class="top-rule"></div>
+
+  <!-- BODY: two panels -->
+  <div class="body">
+    <div class="panels">
+
+      <!-- LEFT PANEL: 2x2 grid centred -->
+      <div class="panel-left">
+        <div class="grid-2x2">
+
+          <!-- Top-left: 1956 computer (UNIVAC era) -->
+          <div class="grid-cell">
+            <div class="grid-cell-era">1956</div>
+            <div class="grid-cell-image"><img src="assets/img/archive/archive_1956_computer.jpg" alt="1956 UNIVAC computer"></div>
+          </div>
+
+          <!-- Top-right: 2026 computer (silicon) -->
+          <div class="grid-cell">
+            <div class="grid-cell-era">2026</div>
+            <div class="grid-cell-image"><img src="assets/img/archive/archive_2026_silicon.jpg" alt="2026 silicon wafer"></div>
+          </div>
+
+          <!-- Bottom-left: 1956 biology bench -->
+          <div class="grid-cell">
+            <div class="grid-cell-era">1956</div>
+            <div class="grid-cell-image"><img src="assets/img/archive/archive_1956_biology.jpg" alt="1956 biology lab bench"></div>
+          </div>
+
+          <!-- Bottom-right: 2026 biology bench -->
+          <div class="grid-cell">
+            <div class="grid-cell-era">2026</div>
+            <div class="grid-cell-image"><img src="assets/img/archive/archive_2026_biology.jpg" alt="2026 biology lab bench"></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- RIGHT PANEL: stats + bold claim -->
+      <div class="panel-right">
+
+        <div class="stats">
+
+          <div class="stat">
+            <div class="stat-number">&gt;70%</div>
+            <div class="stat-caption">of researchers cannot reproduce others' experiments</div>
+            <div class="stat-source">Baker, Nature 2016</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-number">$28B/yr</div>
+            <div class="stat-caption">cost of irreproducible US preclinical research</div>
+            <div class="stat-source">Freedman et al., PLOS Biology 2015</div>
+          </div>
+
+        </div>
+
+        <div class="closing-claim">Biology still runs on 1950s hardware. The infrastructure for AI × Bio doesn't exist.</div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TEMPLATE: FOOTER -->
+  <div class="footer">
+    <div class="footer-text">
+      <span>Unicorn Biotechnologies<span class="pipe">|</span>Investor Deck 2026</span>
+      <span>03 / 13</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

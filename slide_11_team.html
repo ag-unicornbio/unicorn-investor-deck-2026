@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Slide 11 - Team</title>
+<style>
+  /* ============================================================
+     SLIDE 11 - TEAM (v4)
+     Per Jack 2026-04-29:
+       - Leadership panel widened (flex 1.4 vs team 1.0) so names
+         and titles fit on one row each. Photo shrunk to 9vw to
+         give the info column enough horizontal room.
+       - Adam and Jack stay 3-noun responsibilities (bios live on Slide 8).
+       - Chris and Joanne get longer credential bios (first appearance
+         on the deck): 20+ years + named employers / institution.
+       - Team photos bumped to 14vh max 160px (was 12vh max 140).
+       - Team tiles tightened: column-gap 0.8vw, row-gap 1.2vh.
+       - Team tiles top-aligned (justify-content: flex-start) so all
+         photos and names line up in their row regardless of Alan's
+         extra subline. Alan subline extends below the row baseline.
+     ============================================================ */
+
+  @font-face {
+    font-family: 'DIN Pro';
+    src: url('assets/fonts/DINPro-Light.ttf') format('truetype');
+    font-weight: 300;
+  }
+  @font-face {
+    font-family: 'DIN Pro';
+    src: url('assets/fonts/DINPro-Medium.ttf') format('truetype');
+    font-weight: 500;
+  }
+
+  :root {
+    --prometheus: #D91C5C;
+    --aquarius: #26A9E0;
+    --bg-charcoal: #1A1A1A;
+    --layer-surface: #222226;
+    --layer-border: rgba(240, 240, 240, 0.10);
+    --pure-white: #FFFFFF;
+    --off-white: #F0F0F0;
+    --body-white: #E8E8E8;
+    --label-grey: rgba(240, 240, 240, 0.55);
+    --body-grey: rgba(240, 240, 240, 0.85);
+    --rule-grey: rgba(240, 240, 240, 0.18);
+    --source-grey: rgba(240, 240, 240, 0.40);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+    font-family: 'DIN Pro', 'Helvetica Neue', sans-serif;
+    font-variant-ligatures: none;
+    font-feature-settings: "liga" 0, "clig" 0;
+  }
+
+  .slide {
+    position: relative;
+    width: 100vw;
+    height: 56.25vw;
+    max-height: 100vh;
+    max-width: 177.78vh;
+    margin: 0 auto;
+    overflow: hidden;
+    background-color: var(--bg-charcoal);
+    padding: 4% 7% 2.5% 7%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===== CHROME ===== */
+  .top-strip {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3.5vh;
+    flex-shrink: 0;
+  }
+
+  .top-strip .header-logo {
+    height: 4.0vw;
+    max-height: 64px;
+    width: auto;
+  }
+
+  .top-strip .section-label {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(16px, 1.5vw, 22px);
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--pure-white);
+  }
+
+  .headline-block {
+    text-align: center;
+    margin-bottom: 2.5vh;
+    flex-shrink: 0;
+  }
+
+  .slide-headline {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(30px, 3.0vw, 48px);
+    color: var(--pure-white);
+    line-height: 1.2;
+    letter-spacing: -0.005em;
+    max-width: 92%;
+    margin: 0 auto;
+  }
+
+  .top-rule {
+    height: 3px;
+    background: linear-gradient(to right, var(--prometheus), var(--aquarius));
+    margin: 0 0 4vh;
+    flex-shrink: 0;
+  }
+
+  /* ===== BODY =====
+     padding-bottom: 4vh balances the 4vh top-rule margin so content
+     sits at the visual midpoint between Borealis line and footer rule. */
+  .body {
+    flex: 1;
+    display: flex;
+    gap: 3vw;
+    position: relative;
+    padding-bottom: 4vh;
+    min-height: 0;
+  }
+
+  /* ----- LEFT: leadership 2x2 (no card wrappers, widened) ----- */
+  .panel-leadership {
+    flex: 1.4;
+    display: grid;
+    /* minmax(0, 1fr) forces strictly-equal column widths regardless of
+       content size. */
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: 1fr 1fr;
+    column-gap: 1.5vw;
+    row-gap: 2vh;
+    /* default align-items: stretch so leader cells fill row height;
+       internal align-items: center on .leader then centers photo+info
+       in the cell, putting photo center at cell midpoint = team
+       content midpoint. */
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .leader {
+    display: flex;
+    /* center (cross axis) vertically centers the info column against
+       the photo's centerpoint, AND keeps the leader content centered
+       in its cell so the leadership block aligns to the midpoint of
+       the team-tile row across panels. */
+    align-items: center;
+    gap: 1.4vw;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  /* Management photo treatment matches Slide 8 founder photos:
+     16px rounded corners, 2px white hairline border, soft-white mat
+     showing in a 5px gap around an absolute-positioned img. */
+  .leader-photo {
+    position: relative;
+    width: 9vw;
+    max-width: 180px;
+    aspect-ratio: 1 / 1;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.09);
+    border: 2px solid rgba(255, 255, 255, 0.22);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  /* Img sized via calc() — same pattern as Slide 8 .founder-photo img.
+     `inset:` alone doesn't size replaced elements (img falls back to
+     intrinsic dimensions), so explicit width/height are required. */
+  .leader-photo img {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    object-fit: cover;
+    /* Inner radius slightly less than outer (16px) minus 5px mat. */
+    border-radius: 11px;
+    display: block;
+  }
+
+  /* Reporting-line color coding for management (per Jack 2026-05-04).
+     Adam + Jack stay neutral white-tint (founders, separate category).
+     Chris gets Aquarius cyan (engineering line); Joanne gets soft
+     Prometheus (science line). Same modifiers reused on team tiles
+     so reports inherit their lead's color. */
+  .leader-photo--eng {
+    border-color: rgba(38, 169, 224, 0.55);
+  }
+  .leader-photo--sci {
+    border-color: rgba(217, 28, 92, 0.40);
+  }
+
+  .leader-info {
+    display: flex;
+    flex-direction: column;
+    /* Center-align all children horizontally per Jack 2026-05-04. */
+    align-items: center;
+    text-align: center;
+    gap: 0.7vh;
+    min-width: 0;
+    flex: 1 1 0;
+    overflow: hidden;
+  }
+
+  .leader-name-row {
+    display: flex;
+    align-items: center;
+    /* Center the name+flag combo within the now center-aligned info column. */
+    justify-content: center;
+    gap: 0.5vw;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+  }
+
+  .leader-name {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(19px, 1.55vw, 25px);
+    color: var(--pure-white);
+    line-height: 1.1;
+    letter-spacing: -0.005em;
+    white-space: nowrap;
+  }
+
+  .leader-flag {
+    font-size: clamp(19px, 1.55vw, 25px);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .leader-title {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 300;
+    font-size: clamp(14px, 1.15vw, 18px);
+    color: var(--off-white);
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .leader-blurb {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(13px, 1.1vw, 16px);
+    color: var(--body-grey);
+    line-height: 1.4;
+  }
+
+  /* ----- RIGHT: team 3x2 (no card wrappers, tightened) ----- */
+  .panel-team {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr 1fr;
+    column-gap: 0.8vw;
+    row-gap: 1.2vh;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  /* Top-align team content with padding-top: 4vh. This positions each
+     photo at roughly cell_top + 4vh, which is where centered content
+     would have placed it anyway (cell ~317px, content ~228px → 44.5px
+     from top). The benefit: subline can sit in-flow below the title,
+     extending Alan's content downward without forcing his photo up. */
+  .team-member {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1vh;
+    min-height: 0;
+    min-width: 0;
+    text-align: center;
+    padding-top: 4vh;
+  }
+
+  .team-photo {
+    position: relative;
+    width: 15.5vh;
+    height: 15.5vh;
+    max-width: 175px;
+    max-height: 175px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2a2a2e 0%, #1f1f23 100%);
+    /* Bumped from 1px to 2px to match management tile thickness; default
+       is neutral white-tint, overridden by --eng / --sci / --alan modifiers
+       to color-code by reporting line. */
+    border: 2px solid rgba(255, 255, 255, 0.22);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  /* Reporting-line color coding (mirrors .leader-photo modifiers). */
+  .team-photo--eng {
+    border-color: rgba(38, 169, 224, 0.55);
+  }
+  .team-photo--sci {
+    border-color: rgba(217, 28, 92, 0.40);
+  }
+
+  /* Team headshots are circle-cropped PNGs (transparent corners). The
+     container is also 50%-rounded so both circles align — no mat, no
+     visible bg outside the circle. */
+  .team-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .team-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3vh;
+    min-width: 0;
+  }
+
+  .team-name {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(17px, 1.45vw, 22px);
+    color: var(--pure-white);
+    line-height: 1.15;
+    letter-spacing: -0.005em;
+  }
+
+  .team-title {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 300;
+    font-size: clamp(14px, 1.13vw, 17px);
+    color: var(--body-grey);
+    line-height: 1.3;
+  }
+
+  /* Alan: violet accent (#9D4EDD) — third color outside Aquarius/Prometheus.
+     Biology (Joanne/Jenny/Amy) uses Prometheus per brand mapping; Alan is
+     a category of one (Unicorn's AI operating system, not a reporting line)
+     so he gets a unique hue. Bg tint + full-strength border signal his
+     special status against the rest of the team's flat color-coded borders. */
+  .team-photo--alan {
+    background: linear-gradient(135deg, rgba(157, 78, 221, 0.18) 0%, rgba(157, 78, 221, 0.06) 100%);
+    border: 2px solid rgba(157, 78, 221, 0.65);
+    color: var(--off-white);
+  }
+
+  /* In-flow subline below title. Only appears on Alan's tile.
+     Other tiles top-align their photo/name/title and have empty space
+     where Alan's subline lives. */
+  .team-sub {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(13px, 1.05vw, 15px);
+    color: var(--label-grey);
+    line-height: 1.35;
+    margin-top: 0.6vh;
+    max-width: 95%;
+    text-align: center;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    margin-top: auto;
+    padding-top: 1.6vh;
+    border-top: 1px solid var(--rule-grey);
+    flex-shrink: 0;
+  }
+
+  .footer-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(14px, 1.15vw, 18px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--off-white);
+  }
+
+  .footer-text .pipe {
+    display: inline-block;
+    margin: 0 0.7em;
+    color: rgba(240, 240, 240, 0.4);
+  }
+
+  @media print {
+    @page { size: 1920px 1080px; margin: 0; }
+    html, body { width: 1920px; height: 1080px; }
+    .slide { width: 1920px; height: 1080px; max-width: none; max-height: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+
+  <div class="top-strip">
+    <img src="assets/img/UB_Horisontal_Color.png" alt="Unicorn" class="header-logo">
+    <span class="section-label">Team</span>
+  </div>
+
+  <div class="headline-block">
+    <h1 class="slide-headline">We built the data factory. Now we scale it.</h1>
+  </div>
+
+  <div class="top-rule"></div>
+
+  <div class="body">
+
+    <!-- LEFT: leadership 2x2 -->
+    <div class="panel-leadership">
+
+      <!-- Adam: 3-noun responsibilities (bio is on Slide 8) -->
+      <div class="leader">
+        <div class="leader-photo"><img src="assets/img/headshots/headshot_adam_cropped_soft.png" alt="Dr. Adam Glen"></div>
+        <div class="leader-info">
+          <div class="leader-name-row">
+            <span class="leader-name">Dr. Adam Glen</span>
+            <span class="leader-flag">&#127468;&#127463;</span>
+          </div>
+          <div class="leader-title">Founder &amp; CEO</div>
+          <div class="leader-blurb">Commercial. Chief Architect. Ecosystem&nbsp;Building.</div>
+        </div>
+      </div>
+
+      <!-- Jack: 3-noun responsibilities (bio is on Slide 8) -->
+      <div class="leader">
+        <div class="leader-photo"><img src="assets/img/headshots/headshot_jack_cropped_soft.png" alt="Jack Reid"></div>
+        <div class="leader-info">
+          <div class="leader-name-row">
+            <span class="leader-name">Jack Reid</span>
+            <span class="leader-flag">&#127482;&#127480;</span>
+          </div>
+          <div class="leader-title">Founder &amp; President</div>
+          <div class="leader-blurb">Commercial. Product. IP. Finance. US&nbsp;expansion.</div>
+        </div>
+      </div>
+
+      <!-- Chris: first appearance, full credential bio -->
+      <div class="leader">
+        <div class="leader-photo leader-photo--eng"><img src="assets/img/headshots/headshot_chris_cropped_soft.png" alt="Chris Hudson"></div>
+        <div class="leader-info">
+          <div class="leader-name-row">
+            <span class="leader-name">Chris Hudson</span>
+          </div>
+          <div class="leader-title">CTO</div>
+          <div class="leader-blurb">&gt;20 years in robotics, software, data infra, and ML. McLaren F1, Bombardier, BAE, Forg3D.</div>
+        </div>
+      </div>
+
+      <!-- Joanne: first appearance, full credential bio -->
+      <div class="leader">
+        <div class="leader-photo leader-photo--sci"><img src="assets/img/headshots/headshot_joanne_cropped_soft.png" alt="Dr. Joanne Lacey"></div>
+        <div class="leader-info">
+          <div class="leader-name-row">
+            <span class="leader-name">Dr. Joanne Lacey</span>
+          </div>
+          <div class="leader-title">CSO</div>
+          <div class="leader-blurb">&gt;20 years in cell and molecular biology, bioproduction. University of Sheffield.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: team 3x2 -->
+    <div class="panel-team">
+
+      <!-- Top row: Jenny | Archie | Rory -->
+      <div class="team-member">
+        <div class="team-photo team-photo--sci"><img src="assets/img/headshots/headshot_jenny_cropped_soft.png" alt="Jenny Ross"></div>
+        <div class="team-text">
+          <div class="team-name">Jenny Ross</div>
+          <div class="team-title">Technical Operations Lead</div>
+        </div>
+      </div>
+
+      <div class="team-member">
+        <div class="team-photo team-photo--eng"><img src="assets/img/headshots/headshot_archie_cropped_soft.png" alt="Archie Lees"></div>
+        <div class="team-text">
+          <div class="team-name">Archie Lees</div>
+          <div class="team-title">Manufacturing Lead</div>
+        </div>
+      </div>
+
+      <div class="team-member">
+        <div class="team-photo team-photo--eng"><img src="assets/img/headshots/headshot_rory_cropped_soft.png" alt="Rory Charlesworth"></div>
+        <div class="team-text">
+          <div class="team-name">Rory Charlesworth</div>
+          <div class="team-title">Production Engineer</div>
+        </div>
+      </div>
+
+      <!-- Bottom row: Jakub | Amy | Alan -->
+      <div class="team-member">
+        <div class="team-photo team-photo--eng"><img src="assets/img/headshots/headshot_jakub_cropped_soft.png" alt="Jakub Jasik"></div>
+        <div class="team-text">
+          <div class="team-name">Jakub Jasik</div>
+          <div class="team-title">Staff Engineer</div>
+        </div>
+      </div>
+
+      <div class="team-member">
+        <div class="team-photo team-photo--sci"><img src="assets/img/headshots/headshot_amy_cropped_soft.png" alt="Amy Nowell"></div>
+        <div class="team-text">
+          <div class="team-name">Amy Nowell</div>
+          <div class="team-title">Staff Scientist</div>
+        </div>
+      </div>
+
+      <div class="team-member">
+        <div class="team-photo team-photo--alan"><img src="assets/img/headshots/headshot_alan_cropped_soft.png" alt="Alan"></div>
+        <div class="team-text">
+          <div class="team-name">Alan</div>
+          <div class="team-title">Unicorn's AI operating system</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <div class="footer-text">
+      <span>Unicorn Biotechnologies<span class="pipe">|</span>Investor Deck 2026</span>
+      <span>11 / 13</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

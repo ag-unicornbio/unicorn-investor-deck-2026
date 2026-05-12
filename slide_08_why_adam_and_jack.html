@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Slide 8 — Why Adam and Jack</title>
+<style>
+  /* ============================================================
+     SLIDE 8 — WHY ADAM AND JACK (iteration 3)
+     Major changes:
+     - Headline: "Six years building autonomous biology infrastructure"
+     - Timeline: 7 events, architectural arc (reagent → robotics → software)
+     - Headline NOW ABOVE Borealis line (architectural template change)
+     - Body text doubled in size — bios, timeline labels, footer all up
+     - Smaller photos pushed close to headline
+     ============================================================ */
+
+  @font-face {
+    font-family: 'DIN Pro';
+    src: url('assets/fonts/DINPro-Light.ttf') format('truetype');
+    font-weight: 300;
+  }
+  @font-face {
+    font-family: 'DIN Pro';
+    src: url('assets/fonts/DINPro-Medium.ttf') format('truetype');
+    font-weight: 500;
+  }
+
+  :root {
+    --prometheus: #D91C5C;
+    --aquarius: #26A9E0;
+    --bg-charcoal: #1A1A1A;
+    --true-black: #0A0A0A;
+    --pure-white: #FFFFFF;
+    --off-white: #F0F0F0;
+    --body-white: #E8E8E8;
+    --label-grey: rgba(240, 240, 240, 0.55);
+    --body-grey: rgba(240, 240, 240, 0.85);
+    --rule-grey: rgba(240, 240, 240, 0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+    font-family: 'DIN Pro', 'Helvetica Neue', sans-serif;
+    /* DIN Pro's fi/fl ligature glyphs render as "(" / "/" in this font file —
+       disable ligatures so words like "First" render correctly instead of "(rst". */
+    font-variant-ligatures: none;
+    font-feature-settings: "liga" 0, "clig" 0;
+  }
+
+  .slide {
+    position: relative;
+    width: 100vw;
+    height: 56.25vw;
+    max-height: 100vh;
+    max-width: 177.78vh;
+    margin: 0 auto;
+    overflow: hidden;
+    background-color: var(--bg-charcoal);
+    padding: 4% 7% 2.5% 7%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===== TEMPLATE: HEADER (logo + section label, no rule below) ===== */
+  .top-strip {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3.5vh;
+  }
+
+  .top-strip .header-logo {
+    height: 4.0vw;
+    max-height: 64px;
+    width: auto;
+  }
+
+  .top-strip .section-label {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(16px, 1.5vw, 22px);
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--pure-white);
+  }
+
+  /* ===== TEMPLATE: HEADLINE (now above Borealis rule) ===== */
+  .headline-block {
+    text-align: center;
+    margin-bottom: 2.5vh;
+  }
+
+  .slide-headline {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(30px, 3.0vw, 48px);
+    color: var(--pure-white);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    max-width: 92%;
+    margin: 0 auto;
+  }
+
+  /* Borealis rule now divides headline from body, full content width */
+  .top-rule {
+    height: 2px;
+    background: linear-gradient(to right, var(--prometheus), var(--aquarius));
+    margin: 0 0 4vh;
+  }
+
+  /* ===== BODY: founders + timeline ===== */
+  .body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 4vh;            /* small breathing above founders */
+    /* Reduced from 8vh — lowers the timeline closer to the footer, growing
+       the gap between founders (top) and timeline (bottom) by ~10%.
+       Founders stay static; the slack between them and the timeline grows. */
+    padding-bottom: 6.5vh;
+  }
+
+  /* FOUNDERS — smaller photos, info to the right */
+  .founders {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6%;
+    max-width: 92%;
+    margin: 0 auto;
+  }
+
+  .founder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5vw;
+    /* center each founder's photo+text combo within its half-column so the
+       visual gap between Adam's content and Jack's content is symmetric
+       around the slide centerline (regardless of bio length differences). */
+  }
+
+  .founder-photo {
+    position: relative;
+    width: 14vw;
+    max-width: 220px;
+    aspect-ratio: 1 / 1;
+    /* Rounded corners + visible hairline border + thin soft-white matting.
+       Soft-white bg shows in the 5px gap around the absolute-positioned
+       img as a polaroid-style mat, softening the transition between the
+       white portrait bg and the charcoal slide. */
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.09);
+    border: 2px solid rgba(255, 255, 255, 0.22);
+    overflow: hidden;
+  }
+
+  /* Img is absolute-positioned and explicitly sized via calc(). For img
+     (a replaced element), `inset:` alone only sets position offsets — it
+     doesn't size the element, so img falls back to intrinsic dimensions.
+     Explicit width/height via calc() forces the box to fit the parent
+     minus the 5px mat on each side. Cross-browser stable. */
+  .founder-photo img {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    object-fit: cover;
+    /* Inner radius slightly less than outer (16px) minus 5px mat. */
+    border-radius: 11px;
+    display: block;
+  }
+
+  /* Adam's source has been pre-padded with white space (in
+     headshot_adam.jpg) so cover-crop produces a tighter framing
+     visually consistent with Jack. No CSS transform needed. */
+
+  .founder-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;       /* center children (name-row, title, bio) horizontally */
+    text-align: center;
+    gap: 1.2vh;
+  }
+
+  .founder-name-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;   /* center name + flag horizontally */
+    gap: 1vw;
+  }
+
+  .founder-name {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    /* DOUBLED: was 18-26, now 22-32 */
+    font-size: clamp(22px, 2.0vw, 32px);
+    color: var(--pure-white);
+    line-height: 1.1;
+  }
+
+  .founder-flag {
+    font-size: clamp(26px, 2.4vw, 38px);
+    line-height: 1;
+  }
+
+  .founder-title {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 300;
+    /* DOUBLED: was 13-17, now 17-22 */
+    font-size: clamp(17px, 1.5vw, 22px);
+    color: var(--off-white);
+    letter-spacing: 0.04em;
+  }
+
+  .founder-bio {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 300;
+    font-style: italic;
+    /* DOUBLED: was 12-15, now 17-21 */
+    font-size: clamp(17px, 1.45vw, 21px);
+    color: var(--body-grey);
+    line-height: 1.4;
+    max-width: 95%;
+  }
+
+  /* TIMELINE — story-told-in-7-frames layout (Option B).
+     Single horizontal row of photo cards (year tag → photo → caption).
+     Replaces the gradient-line + alternating-labels timeline. */
+  .timeline {
+    position: relative;
+    margin-top: auto;            /* absorbs slack, growing the gap above the timeline */
+  }
+
+  .timeline-events {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    /* Wider gap so the cadence reads picture | space | arrow | space | picture
+       instead of feeling crammed. Doubling the gap also narrows each cell,
+       shrinking each photo proportionally. */
+    gap: 2.5vw;
+  }
+
+  .event {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1vh;
+  }
+
+  .event-year {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(13px, 1.1vw, 16px);
+    letter-spacing: 0.18em;
+    color: var(--label-grey);
+    text-transform: uppercase;
+  }
+
+  .event-photo {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    /* Bumped from 0.04 → 0.09 to match the founder-photo mat tone. With
+       inset:4px on the img below, this bg shows as a thin 4px polaroid
+       mat around each timeline photo, muting them visually and unifying
+       the treatment with the founder portraits above. */
+    background: rgba(255, 255, 255, 0.09);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 8px;
+    /* NO overflow: hidden — would clip the timeline arrows that
+       extend leftward via .event-photo::before. The img uses its
+       own border-radius for corner clipping instead. */
+  }
+
+  /* Same pattern as .founder-photo img: explicit top/left + width/height
+     via calc(). `inset:` alone doesn't size replaced elements (img falls
+     back to intrinsic dimensions). 4px mat all around. */
+  .event-photo img {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: calc(100% - 8px);
+    height: calc(100% - 8px);
+    object-fit: cover;
+    /* Inner radius slightly less than outer (8px) minus 4px mat. */
+    border-radius: 5px;
+    display: block;
+  }
+
+  /* 2026 source is now pre-cropped to 1.35:1 (very close to 4:3),
+     so default cover-fit works correctly with all 3 people visible. */
+
+  /* Arrow between photos (1->2, 2->3, ..., 6->7).
+     Positioned in the middle of the .timeline-events gap to the left of each
+     non-first photo. Uses Unicode → with system fallback. */
+  .event:not(:first-child) .event-photo::before {
+    content: '→';
+    position: absolute;
+    top: 50%;
+    /* Arrow sits at the gutter midpoint: half of grid-gap (2.5vw) to the
+       left of the photo's left edge, then translate(-50%) centers it. */
+    left: -1.25vw;
+    transform: translate(-50%, -50%);
+    color: var(--label-grey);
+    font-family: 'DIN Pro', 'Helvetica Neue', sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    font-size: clamp(16px, 1.4vw, 22px);
+    line-height: 1;
+  }
+
+  .event-caption {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 300;
+    font-size: clamp(12px, 1.0vw, 15px);
+    color: var(--body-white);
+    line-height: 1.4;
+    width: 100%;
+  }
+
+  /* Present-moment accent for the 2026 cell */
+  .event--present .event-year { color: var(--prometheus); }
+  .event--present .event-photo {
+    border: 1px solid rgba(217, 28, 92, 0.45);
+    background: rgba(217, 28, 92, 0.06);
+    color: var(--off-white);
+    box-shadow: 0 0 0 3px rgba(217, 28, 92, 0.1);
+  }
+  .event--present .event-caption { color: var(--pure-white); }
+
+  /* ===== TEMPLATE: FOOTER (bigger) ===== */
+  .footer {
+    margin-top: auto;
+    padding-top: 1.6vh;
+    border-top: 1px solid var(--rule-grey);
+  }
+
+  .footer-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    /* DOUBLED: was 10-14, now 14-18 */
+    font-size: clamp(14px, 1.15vw, 18px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--off-white);
+  }
+
+  .footer-text .pipe {
+    display: inline-block;
+    margin: 0 0.7em;
+    color: rgba(240, 240, 240, 0.4);
+  }
+
+  @media print {
+    @page { size: 1920px 1080px; margin: 0; }
+    html, body { width: 1920px; height: 1080px; }
+    .slide { width: 1920px; height: 1080px; max-width: none; max-height: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+
+  <!-- TEMPLATE: HEADER (logo + section label, no rule below) -->
+  <div class="top-strip">
+    <img src="assets/img/UB_Horisontal_Color.png" alt="Unicorn" class="header-logo">
+    <span class="section-label">Why Adam &amp; Jack</span>
+  </div>
+
+  <!-- TEMPLATE: HEADLINE (above Borealis rule) -->
+  <div class="headline-block">
+    <h1 class="slide-headline">Six years building autonomous biology infrastructure.</h1>
+  </div>
+
+  <!-- Borealis rule divides headline+identity from body content -->
+  <div class="top-rule"></div>
+
+  <!-- BODY: founders + timeline -->
+  <div class="body">
+
+    <div class="founders">
+
+      <div class="founder">
+        <div class="founder-photo"><img src="assets/img/headshots/headshot_adam_soft.png" alt="Dr. Adam Glen"></div>
+        <div class="founder-info">
+          <div class="founder-name-row">
+            <span class="founder-name">Dr. Adam Glen</span>
+            <span class="founder-flag">🇬🇧</span>
+          </div>
+          <div class="founder-title">Founder &amp; CEO</div>
+          <div class="founder-bio">20 years building autonomous biology. From PhD to Unicorn.</div>
+        </div>
+      </div>
+
+      <div class="founder">
+        <div class="founder-photo"><img src="assets/img/headshots/headshot_jack_soft.png" alt="Jack Reid"></div>
+        <div class="founder-info">
+          <div class="founder-name-row">
+            <span class="founder-name">Jack Reid</span>
+            <span class="founder-flag">🇺🇸</span>
+          </div>
+          <div class="founder-title">Founder &amp; President</div>
+          <div class="founder-bio">Fulbright Scholar. Dropped out of Cambridge-PhD to build Unicorn.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-events">
+
+        <!-- Photo placeholders below describe the actual image to drop in.
+             Replace each .event-photo div with an <img src="..." alt="..."> when assets land. -->
+
+        <div class="event">
+          <div class="event-photo"><img src="assets/img/timeline/timeline_2020_ef.jpg" alt="Jack and Adam on Entrepreneur First Zoom"></div>
+          <div class="event-year">2020</div>
+          <div class="event-caption">Met on Entrepreneur First. Mid-pandemic. Over Zoom.</div>
+        </div>
+
+        <div class="event">
+          <div class="event-photo"><img src="assets/img/timeline/timeline_2021_attic.jpg" alt="First prototypes in Adam's attic"></div>
+          <div class="event-year">2021</div>
+          <div class="event-caption">First prototypes built in Adam's attic.</div>
+        </div>
+
+        <div class="event">
+          <div class="event-photo"><img src="assets/img/timeline/timeline_2022_preseed.jpeg" alt="Pre-seed raise"></div>
+          <div class="event-year">2022</div>
+          <div class="event-caption">Raised first funding round (~$4M raised to date).</div>
+        </div>
+
+        <div class="event">
+          <div class="event-photo"><img src="assets/img/timeline/timeline_2023_new_cropped.png" alt="First reagent shipped"></div>
+          <div class="event-year">2023</div>
+          <div class="event-caption">First reagent shipped and R&amp;D contract won.</div>
+        </div>
+
+        <div class="event">
+          <div class="event-photo"><img src="assets/img/timeline/timeline_2024_nightclub.jpg" alt="Nightclub converted to R&D facility"></div>
+          <div class="event-year">2024</div>
+          <div class="event-caption">Converted a nightclub into an R&amp;D and mfct. center.</div>
+        </div>
+
+        <div class="event">
+          <div class="event-photo"><img src="assets/img/timeline/timeline_2025_emmet.png" alt="First robotic system shipped"></div>
+          <div class="event-year">2025</div>
+          <div class="event-caption">First robotic, software and AI tooling shipped.</div>
+        </div>
+
+        <div class="event event--present">
+          <div class="event-photo"><img src="assets/img/timeline/timeline_2026_darpa.png" alt="Adam and Jack at DARPA"></div>
+          <div class="event-year">2026</div>
+          <div class="event-caption">First US deployment, DoW DARPA contract won.</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TEMPLATE: FOOTER -->
+  <div class="footer">
+    <div class="footer-text">
+      <span>Unicorn Biotechnologies<span class="pipe">|</span>Investor Deck 2026</span>
+      <span>08 / 13</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

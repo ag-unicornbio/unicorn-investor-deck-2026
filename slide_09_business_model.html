@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Slide 9 - Business Model</title>
+<style>
+  /* ============================================================
+     SLIDE 9 - BUSINESS MODEL (v10)
+     Mirrors Slide 5's stack + bracket pattern.
+       LEFT  - vertical stack of 3 stream cards (S1/S2/S3)
+                cards 33% taller than v9, fonts bumped to fill
+       BRACKET - on right edge of stack (vertical Borealis gradient)
+       OVAL  - horizontal ellipse, two endpoints:
+                left endpoint on bracket midpoint
+                right endpoint on Data Factory left-mid
+                top arc (out, arrow at apex pointing RIGHT)
+                  label: "more sales = more data generation"
+                bottom arc (in, arrow at apex pointing LEFT)
+                  label: "better data = more sales"
+       RIGHT - Data Factory hub (Borealis gradient block)
+     ============================================================ */
+
+  @font-face {
+    font-family: 'DIN Pro';
+    src: url('assets/fonts/DINPro-Light.ttf') format('truetype');
+    font-weight: 300;
+  }
+  @font-face {
+    font-family: 'DIN Pro';
+    src: url('assets/fonts/DINPro-Medium.ttf') format('truetype');
+    font-weight: 500;
+  }
+
+  :root {
+    --prometheus: #D91C5C;
+    --aquarius: #26A9E0;
+    --bg-charcoal: #1A1A1A;
+    --layer-surface: #222226;
+    --layer-border: rgba(240, 240, 240, 0.10);
+    --pure-white: #FFFFFF;
+    --off-white: #F0F0F0;
+    --body-white: #E8E8E8;
+    --label-grey: rgba(240, 240, 240, 0.55);
+    --body-grey: rgba(240, 240, 240, 0.85);
+    --rule-grey: rgba(240, 240, 240, 0.18);
+    --source-grey: rgba(240, 240, 240, 0.40);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+    font-family: 'DIN Pro', 'Helvetica Neue', sans-serif;
+    font-variant-ligatures: none;
+    font-feature-settings: "liga" 0, "clig" 0;
+  }
+
+  .slide {
+    position: relative;
+    width: 100vw;
+    height: 56.25vw;
+    max-height: 100vh;
+    max-width: 177.78vh;
+    margin: 0 auto;
+    overflow: hidden;
+    background-color: var(--bg-charcoal);
+    padding: 4% 7% 2.5% 7%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===== CHROME ===== */
+  .top-strip {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3.5vh;
+    flex-shrink: 0;
+  }
+
+  .top-strip .header-logo {
+    height: 4.0vw;
+    max-height: 64px;
+    width: auto;
+  }
+
+  .top-strip .section-label {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(16px, 1.5vw, 22px);
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--pure-white);
+  }
+
+  .headline-block {
+    text-align: center;
+    margin-bottom: 2.5vh;
+    flex-shrink: 0;
+  }
+
+  .slide-headline {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(30px, 3.0vw, 48px);
+    color: var(--pure-white);
+    line-height: 1.2;
+    letter-spacing: -0.005em;
+    max-width: 92%;
+    margin: 0 auto;
+  }
+
+  .top-rule {
+    height: 3px;
+    background: linear-gradient(to right, var(--prometheus), var(--aquarius));
+    margin: 0 0 4vh;
+    flex-shrink: 0;
+  }
+
+  /* ===== BODY =====
+     padding-bottom: 4vh balances the 4vh margin-bottom on .top-rule so
+     the construct (centered in .loop-container) sits at the visual
+     midpoint between the Borealis header line and the footer hairline.
+     Without this, body center sits 2vh below the line midpoint. */
+  .body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding-bottom: 4vh;
+  }
+
+  .loop-container {
+    flex: 1;
+    position: relative;
+  }
+
+  /* ----- LEFT: stream stack (3 cards, +33% height vs v9) ----- */
+  .panel-stack {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 2.4vh;
+  }
+
+  .stream-card {
+    background: var(--layer-surface);
+    border: 1px solid var(--layer-border);
+    border-radius: 6px;
+    padding: 1.8vh 1.4vw;
+    display: grid;
+    grid-template-columns: 12vw 1fr 9.5vw;
+    align-items: center;
+    column-gap: 1.4vw;
+    width: 48vw;
+    max-width: 800px;
+    min-height: 14.6vh;
+  }
+
+  .stream-name-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;       /* center "Stream X" tag and "Sell the stack" name horizontally */
+    text-align: center;
+    gap: 0.5vh;
+  }
+
+  .stream-tag {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(12px, 1.05vw, 14px);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--label-grey);
+    line-height: 1;
+  }
+
+  .stream-name {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(23px, 1.95vw, 31px);
+    color: var(--pure-white);
+    line-height: 1.15;
+    letter-spacing: -0.005em;
+  }
+
+  .stream-line {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 300;
+    font-size: clamp(17px, 1.4vw, 21px);
+    color: var(--body-grey);
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  .stream-stats {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1.3vw;
+  }
+
+  .stat-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4vh;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(23px, 1.95vw, 31px);
+    color: var(--aquarius);
+    line-height: 1;
+    text-box: trim-both cap alphabetic;
+  }
+
+  .stat-label {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 300;
+    font-size: clamp(12px, 1.0vw, 14px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--label-grey);
+  }
+
+  /* ----- RIGHT: Data Factory hub ----- */
+  .data-factory-hub {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20vw;
+    max-width: 360px;
+    height: 26vh;
+    background: linear-gradient(135deg, var(--prometheus) 0%, var(--aquarius) 100%);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2vh 1.5vw;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14), 0 12px 40px rgba(217, 28, 92, 0.22);
+    z-index: 2;
+  }
+
+  .hub-label {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(22px, 2.1vw, 32px);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--pure-white);
+    text-align: center;
+    line-height: 1.05;
+  }
+
+  .hub-sub {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(13px, 1.1vw, 17px);
+    color: rgba(255, 255, 255, 0.92);
+    margin-top: 1vh;
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  /* ----- SVG overlay (bracket + oval + arrows + labels) ----- */
+  .loop-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: visible;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    margin-top: auto;
+    padding-top: 1.6vh;
+    border-top: 1px solid var(--rule-grey);
+    flex-shrink: 0;
+  }
+
+  .footer-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(14px, 1.15vw, 18px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--off-white);
+  }
+
+  .footer-text .pipe {
+    display: inline-block;
+    margin: 0 0.7em;
+    color: rgba(240, 240, 240, 0.4);
+  }
+
+  @media print {
+    @page { size: 1920px 1080px; margin: 0; }
+    html, body { width: 1920px; height: 1080px; }
+    .slide { width: 1920px; height: 1080px; max-width: none; max-height: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+
+  <div class="top-strip">
+    <img src="assets/img/UB_Horisontal_Color.png" alt="Unicorn" class="header-logo">
+    <span class="section-label">Business Model</span>
+  </div>
+
+  <div class="headline-block">
+    <h1 class="slide-headline">The data factory makes money three ways. The data is the moat.</h1>
+  </div>
+
+  <div class="top-rule"></div>
+
+  <div class="body">
+    <div class="loop-container">
+
+      <!-- LEFT: vertical stack of 3 stream cards -->
+      <div class="panel-stack">
+
+        <div class="stream-card">
+          <div class="stream-name-block">
+            <div class="stream-tag">Stream 1</div>
+            <div class="stream-name">Sell the stack</div>
+          </div>
+          <div class="stream-line">Sell every layer of the stack to pharma, biotech, and academia.</div>
+          <div class="stream-stats">
+            <div class="stat-block">
+              <div class="stat-value">$300k</div>
+              <div class="stat-label">ACV</div>
+            </div>
+            <div class="stat-block">
+              <div class="stat-value">85%</div>
+              <div class="stat-label">Margin</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stream-card">
+          <div class="stream-name-block">
+            <div class="stream-tag">Stream 2</div>
+            <div class="stream-name">R&amp;D contracts</div>
+          </div>
+          <div class="stream-line">Customers pay us to use the stack on their hardest problems.</div>
+          <div class="stream-stats">
+            <div class="stat-block">
+              <div class="stat-value">$1.5M</div>
+              <div class="stat-label">ACV</div>
+            </div>
+            <div class="stat-block">
+              <div class="stat-value">40%</div>
+              <div class="stat-label">Margin</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stream-card">
+          <div class="stream-name-block">
+            <div class="stream-tag">Stream 3</div>
+            <div class="stream-name">AI models</div>
+          </div>
+          <div class="stream-line">License foundation models trained on the data factory.</div>
+          <div class="stream-stats">
+            <div class="stat-block">
+              <div class="stat-value">$500k</div>
+              <div class="stat-label">ACV</div>
+            </div>
+            <div class="stat-block">
+              <div class="stat-value">80%</div>
+              <div class="stat-label">Margin</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: Data Factory hub -->
+      <div class="data-factory-hub">
+        <div class="hub-label">Data Factory</div>
+        <div class="hub-sub">One compounding asset</div>
+      </div>
+
+      <!-- SVG overlay: bracket + oval + arrowheads + labels (drawn by JS) -->
+      <svg class="loop-overlay" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="bracketGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#D91C5C"/>
+            <stop offset="100%" stop-color="#26A9E0"/>
+          </linearGradient>
+          <linearGradient id="ovalGradTop" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#D91C5C"/>
+            <stop offset="100%" stop-color="#26A9E0"/>
+          </linearGradient>
+          <linearGradient id="ovalGradBot" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#26A9E0"/>
+            <stop offset="100%" stop-color="#D91C5C"/>
+          </linearGradient>
+        </defs>
+      </svg>
+
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-text">
+      <span>Unicorn Biotechnologies<span class="pipe">|</span>Investor Deck 2026</span>
+      <span>09 / 13</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function() {
+  const ns = 'http://www.w3.org/2000/svg';
+  const ARROW_HEAD = 16;
+  const STROKE_OVAL = 3;
+  const RY = 60;  // vertical bulge (controls oval shape)
+
+  function draw() {
+    const container = document.querySelector('.loop-container');
+    const stack = document.querySelector('.panel-stack');
+    const hub = document.querySelector('.data-factory-hub');
+    const svg = document.querySelector('.loop-overlay');
+    if (!container || !stack || !hub || !svg) return;
+
+    const cBox = container.getBoundingClientRect();
+    function rel(el) {
+      const r = el.getBoundingClientRect();
+      return {
+        left: r.left - cBox.left,
+        right: r.right - cBox.left,
+        top: r.top - cBox.top,
+        bottom: r.bottom - cBox.top,
+        cx: r.left + r.width / 2 - cBox.left,
+        cy: r.top + r.height / 2 - cBox.top,
+        w: r.width,
+        h: r.height
+      };
+    }
+    const STACK = rel(stack);
+    const HUB = rel(hub);
+
+    svg.setAttribute('width', cBox.width);
+    svg.setAttribute('height', cBox.height);
+    svg.setAttribute('viewBox', `0 0 ${cBox.width} ${cBox.height}`);
+
+    while (svg.children.length > 1) svg.removeChild(svg.lastChild);
+
+    // ===== BRACKET on right edge of stack =====
+    const bracketX = STACK.right + 14;
+    const stackTopY = STACK.top;
+    const stackBottomY = STACK.bottom;
+    const stackMidY = (stackTopY + stackBottomY) / 2;
+
+    const bracket = document.createElementNS(ns, 'path');
+    bracket.setAttribute('d',
+      `M ${bracketX - 16} ${stackTopY}
+       L ${bracketX} ${stackTopY}
+       L ${bracketX} ${stackBottomY}
+       L ${bracketX - 16} ${stackBottomY}`);
+    bracket.setAttribute('stroke', 'url(#bracketGrad)');
+    bracket.setAttribute('stroke-width', '4');
+    bracket.setAttribute('fill', 'none');
+    bracket.setAttribute('stroke-linecap', 'round');
+    bracket.setAttribute('stroke-linejoin', 'round');
+    svg.appendChild(bracket);
+
+    // ===== OVAL: two arcs of one ellipse =====
+    // Left endpoint on bracket midpoint, right endpoint on hub left-mid
+    const ovalLeftX = bracketX + 6;
+    const ovalLeftY = stackMidY;
+    const ovalRightX = HUB.left - 6;
+    const ovalRightY = HUB.cy;
+
+    const cx = (ovalLeftX + ovalRightX) / 2;
+    const cy = (ovalLeftY + ovalRightY) / 2;
+    const rx = (ovalRightX - ovalLeftX) / 2;
+    const ry = RY;
+
+    // Top arc (CW from left endpoint - arc rises through top of ellipse to right endpoint)
+    const topArc = document.createElementNS(ns, 'path');
+    topArc.setAttribute('d',
+      `M ${ovalLeftX} ${ovalLeftY} A ${rx} ${ry} 0 0 1 ${ovalRightX} ${ovalRightY}`);
+    topArc.setAttribute('stroke', 'url(#ovalGradTop)');
+    topArc.setAttribute('stroke-width', STROKE_OVAL);
+    topArc.setAttribute('fill', 'none');
+    topArc.setAttribute('stroke-linecap', 'round');
+    svg.appendChild(topArc);
+
+    // Update top gradient: pink at bracket-side (left), cyan at hub-side (right)
+    const gTop = svg.querySelector('#ovalGradTop');
+    if (gTop) {
+      gTop.setAttribute('x1', ovalLeftX);
+      gTop.setAttribute('y1', cy - ry);
+      gTop.setAttribute('x2', ovalRightX);
+      gTop.setAttribute('y2', cy - ry);
+    }
+
+    // Bottom arc (CW from right endpoint - arc descends through bottom of ellipse to left endpoint)
+    const botArc = document.createElementNS(ns, 'path');
+    botArc.setAttribute('d',
+      `M ${ovalRightX} ${ovalRightY} A ${rx} ${ry} 0 0 1 ${ovalLeftX} ${ovalLeftY}`);
+    botArc.setAttribute('stroke', 'url(#ovalGradBot)');
+    botArc.setAttribute('stroke-width', STROKE_OVAL);
+    botArc.setAttribute('fill', 'none');
+    botArc.setAttribute('stroke-linecap', 'round');
+    svg.appendChild(botArc);
+
+    // Update bottom gradient: cyan at hub-side (right), pink at bracket-side (left)
+    const gBot = svg.querySelector('#ovalGradBot');
+    if (gBot) {
+      gBot.setAttribute('x1', ovalRightX);
+      gBot.setAttribute('y1', cy + ry);
+      gBot.setAttribute('x2', ovalLeftX);
+      gBot.setAttribute('y2', cy + ry);
+    }
+
+    // ===== ARROWHEADS at apexes =====
+    // Top apex (cx, cy - ry): arrow pointing RIGHT (out direction)
+    drawArrowhead(svg, cx + 9, cy - ry, 1, 0, '#26A9E0');
+    // Bottom apex (cx, cy + ry): arrow pointing LEFT (in direction)
+    drawArrowhead(svg, cx - 9, cy + ry, -1, 0, '#D91C5C');
+
+    // ===== LABELS =====
+    // Bolder, slightly bigger, more whitespace from arc apex per Jack 2026-04-28
+    // Top label above top apex
+    const topLabel = document.createElementNS(ns, 'text');
+    topLabel.setAttribute('x', cx);
+    topLabel.setAttribute('y', cy - ry - 38);
+    topLabel.setAttribute('text-anchor', 'middle');
+    topLabel.setAttribute('fill', '#FFFFFF');
+    topLabel.setAttribute('font-family', "'DIN Pro', 'Helvetica Neue', sans-serif");
+    topLabel.setAttribute('font-weight', '500');
+    topLabel.setAttribute('font-size', '20');
+    topLabel.setAttribute('letter-spacing', '0.04em');
+    topLabel.textContent = 'More sales = more data generation';
+    svg.appendChild(topLabel);
+
+    // Bottom label below bottom apex
+    const botLabel = document.createElementNS(ns, 'text');
+    botLabel.setAttribute('x', cx);
+    botLabel.setAttribute('y', cy + ry + 48);
+    botLabel.setAttribute('text-anchor', 'middle');
+    botLabel.setAttribute('fill', '#FFFFFF');
+    botLabel.setAttribute('font-family', "'DIN Pro', 'Helvetica Neue', sans-serif");
+    botLabel.setAttribute('font-weight', '500');
+    botLabel.setAttribute('font-size', '20');
+    botLabel.setAttribute('letter-spacing', '0.04em');
+    botLabel.textContent = 'Better data = more sales';
+    svg.appendChild(botLabel);
+  }
+
+  function drawArrowhead(svg, tipX, tipY, ux, uy, color) {
+    // Triangle: tip at (tipX, tipY), base perpendicular to (ux, uy), ARROW_HEAD back
+    const baseX = tipX - ux * ARROW_HEAD;
+    const baseY = tipY - uy * ARROW_HEAD;
+    const perpX = -uy;
+    const perpY = ux;
+    const halfW = ARROW_HEAD * 0.55;
+    const points =
+      `${tipX},${tipY} ` +
+      `${baseX + perpX * halfW},${baseY + perpY * halfW} ` +
+      `${baseX - perpX * halfW},${baseY - perpY * halfW}`;
+    const poly = document.createElementNS(ns, 'polygon');
+    poly.setAttribute('points', points);
+    poly.setAttribute('fill', color);
+    svg.appendChild(poly);
+  }
+
+  if (document.readyState === 'complete') {
+    setTimeout(draw, 50);
+  } else {
+    window.addEventListener('load', () => setTimeout(draw, 50));
+  }
+  window.addEventListener('resize', draw);
+})();
+</script>
+
+</body>
+</html>

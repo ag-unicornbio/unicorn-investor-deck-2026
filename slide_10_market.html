@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Slide 10 - Market</title>
+<style>
+  /* ============================================================
+     SLIDE 10 - MARKET (v4)
+     Split layout (KISS):
+       LEFT  - bottom-up math chain (left-aligned numbers,
+               operators in middle column, descriptors right;
+               +50% font sizes from v3)
+       RIGHT - line chart (TAM 2025 to 2040, ~25% CAGR)
+                cleaner endpoint label placement, larger
+                endpoint dots so labels and points pair clearly
+     ============================================================ */
+
+  @font-face {
+    font-family: 'DIN Pro';
+    src: url('assets/fonts/DINPro-Light.ttf') format('truetype');
+    font-weight: 300;
+  }
+  @font-face {
+    font-family: 'DIN Pro';
+    src: url('assets/fonts/DINPro-Medium.ttf') format('truetype');
+    font-weight: 500;
+  }
+
+  :root {
+    --prometheus: #D91C5C;
+    --aquarius: #26A9E0;
+    --bg-charcoal: #1A1A1A;
+    --layer-surface: #222226;
+    --layer-border: rgba(240, 240, 240, 0.10);
+    --pure-white: #FFFFFF;
+    --off-white: #F0F0F0;
+    --body-white: #E8E8E8;
+    --label-grey: rgba(240, 240, 240, 0.55);
+    --body-grey: rgba(240, 240, 240, 0.85);
+    --rule-grey: rgba(240, 240, 240, 0.18);
+    --source-grey: rgba(240, 240, 240, 0.40);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+    font-family: 'DIN Pro', 'Helvetica Neue', sans-serif;
+    font-variant-ligatures: none;
+    font-feature-settings: "liga" 0, "clig" 0;
+  }
+
+  .slide {
+    position: relative;
+    width: 100vw;
+    height: 56.25vw;
+    max-height: 100vh;
+    max-width: 177.78vh;
+    margin: 0 auto;
+    overflow: hidden;
+    background-color: var(--bg-charcoal);
+    padding: 4% 7% 2.5% 7%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===== CHROME ===== */
+  .top-strip {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3.5vh;
+    flex-shrink: 0;
+  }
+
+  .top-strip .header-logo {
+    height: 4.0vw;
+    max-height: 64px;
+    width: auto;
+  }
+
+  .top-strip .section-label {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(16px, 1.5vw, 22px);
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--pure-white);
+  }
+
+  .headline-block {
+    text-align: center;
+    margin-bottom: 2.5vh;
+    flex-shrink: 0;
+  }
+
+  .slide-headline {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(30px, 3.0vw, 48px);
+    color: var(--pure-white);
+    line-height: 1.2;
+    letter-spacing: -0.005em;
+    max-width: 92%;
+    margin: 0 auto;
+  }
+
+  .top-rule {
+    height: 3px;
+    background: linear-gradient(to right, var(--prometheus), var(--aquarius));
+    margin: 0 0 4vh;
+    flex-shrink: 0;
+  }
+
+  /* ===== BODY ===== */
+  .body {
+    flex: 1;
+    display: flex;
+    gap: 4vw;
+    position: relative;
+    padding-bottom: 5vh;
+    min-height: 0;
+  }
+
+  .panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    min-width: 0;
+  }
+
+  /* ----- LEFT: bottom-up math chain -----
+     Single grid for the whole chain so columns size globally:
+       col 1 (max-content) fits the widest value across all rows
+       col 2 (auto) fits the widest operator
+       col 3 (1fr) takes remaining width for the descriptor
+     align-items: center vertically centers operators on each row's
+     midpoint instead of dropping them to the baseline. row-gap gives
+     consistent vertical rhythm regardless of content. */
+  .math-chain {
+    display: grid;
+    grid-template-columns: max-content auto 1fr;
+    column-gap: 1.5vw;
+    row-gap: 1.6vh;
+    align-items: center;
+    width: 100%;
+    max-width: 720px;
+  }
+
+  .math-value {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(42px, 3.9vw, 60px);
+    color: var(--pure-white);
+    line-height: 1;
+    letter-spacing: -0.01em;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .math-op {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 300;
+    font-size: clamp(30px, 2.8vw, 44px);
+    color: var(--label-grey);
+    line-height: 1;
+    text-align: center;
+    min-width: 0.8em;
+  }
+
+  .math-descriptor {
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 300;
+    font-size: clamp(20px, 1.7vw, 26px);
+    color: var(--body-grey);
+    line-height: 1.25;
+    text-align: left;
+  }
+
+  .math-divider {
+    grid-column: 1 / -1;
+    height: 1px;
+    background: linear-gradient(to right, var(--rule-grey) 0%, var(--rule-grey) 35%, transparent 60%);
+    margin: 0.6vh 0;
+  }
+
+  .math-result-value {
+    font-size: clamp(60px, 5.7vw, 90px);
+    color: var(--prometheus);
+  }
+
+  .math-result-descriptor {
+    font-size: clamp(22px, 2.0vw, 30px);
+    color: var(--off-white);
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    /* normal case (no text-transform) so the result label supports the
+       number rather than competing with it */
+  }
+
+  /* ----- RIGHT: line chart ----- */
+  .chart-wrap {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  .chart-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  /* ----- Methodology footnote ----- */
+  .methodology-footnote {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 300;
+    font-size: clamp(11px, 0.9vw, 13px);
+    color: var(--source-grey);
+    font-style: italic;
+    text-align: right;
+    max-width: 50%;
+    line-height: 1.4;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    margin-top: auto;
+    padding-top: 1.6vh;
+    border-top: 1px solid var(--rule-grey);
+    flex-shrink: 0;
+  }
+
+  .footer-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'DIN Pro', sans-serif;
+    font-weight: 500;
+    font-size: clamp(14px, 1.15vw, 18px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--off-white);
+  }
+
+  .footer-text .pipe {
+    display: inline-block;
+    margin: 0 0.7em;
+    color: rgba(240, 240, 240, 0.4);
+  }
+
+  @media print {
+    @page { size: 1920px 1080px; margin: 0; }
+    html, body { width: 1920px; height: 1080px; }
+    .slide { width: 1920px; height: 1080px; max-width: none; max-height: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+
+  <div class="top-strip">
+    <img src="assets/img/UB_Horisontal_Color.png" alt="Unicorn" class="header-logo">
+    <span class="section-label">Market</span>
+  </div>
+
+  <div class="headline-block">
+    <h1 class="slide-headline">Infrastructure for AI &times; biology will be a &gt;$800B market by 2040.</h1>
+  </div>
+
+  <div class="top-rule"></div>
+
+  <div class="body">
+
+    <!-- LEFT: bottom-up math chain -->
+    <div class="panel panel-math">
+      <div class="math-chain">
+
+        <div class="math-value">5M</div>
+        <div class="math-op"></div>
+        <div class="math-descriptor">Global biologists today</div>
+
+        <div class="math-value">5%</div>
+        <div class="math-op">&times;</div>
+        <div class="math-descriptor">On automatable work</div>
+
+        <div class="math-value">2.5</div>
+        <div class="math-op">&divide;</div>
+        <div class="math-descriptor">Biologists replaced per system</div>
+
+        <div class="math-value">$300k</div>
+        <div class="math-op">&times;</div>
+        <div class="math-descriptor">Annualised value per system</div>
+
+        <div class="math-divider"></div>
+
+        <div class="math-value math-result-value">$30B</div>
+        <div class="math-op"></div>
+        <div class="math-descriptor math-result-descriptor">Today's TAM</div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT: line chart -->
+    <div class="panel panel-chart">
+      <div class="chart-wrap">
+        <svg class="chart-svg" viewBox="0 0 600 540" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+          <!--
+            Chart geometry:
+              plot area: x=80..580, y=60..460
+              X-axis: 2025 at x=80, 2040 at x=580
+                      2030 at x=247, 2035 at x=413
+              Y-axis: $0 at y=460, $1T at y=60
+                      $500B at y=260
+            Data points (~25% CAGR from $30B to ~$840B):
+              2025, $30B  -> (80, 448)
+              2030, $92B  -> (247, 423)
+              2035, $280B -> (413, 348)
+              2040, $840B -> (580, 124)
+          -->
+
+          <defs>
+            <linearGradient id="lineGrad" gradientUnits="userSpaceOnUse" x1="80" y1="448" x2="580" y2="124">
+              <stop offset="0%" stop-color="#D91C5C"/>
+              <stop offset="100%" stop-color="#26A9E0"/>
+            </linearGradient>
+            <linearGradient id="areaGrad" gradientUnits="userSpaceOnUse" x1="0" y1="60" x2="0" y2="460">
+              <stop offset="0%" stop-color="#26A9E0" stop-opacity="0.28"/>
+              <stop offset="100%" stop-color="#26A9E0" stop-opacity="0.02"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Y-axis baseline (X-axis horizontal line) -->
+          <line x1="80" y1="460" x2="580" y2="460"
+                stroke="rgba(240, 240, 240, 0.35)" stroke-width="1"/>
+
+          <!-- Y-axis vertical line (subtle) -->
+          <line x1="80" y1="60" x2="80" y2="460"
+                stroke="rgba(240, 240, 240, 0.12)" stroke-width="1"/>
+
+          <!-- Horizontal gridlines at $500B and $1T -->
+          <line x1="80" y1="260" x2="580" y2="260"
+                stroke="rgba(240, 240, 240, 0.10)" stroke-width="1" stroke-dasharray="3,4"/>
+          <line x1="80" y1="60" x2="580" y2="60"
+                stroke="rgba(240, 240, 240, 0.10)" stroke-width="1" stroke-dasharray="3,4"/>
+
+          <!-- Y-axis labels -->
+          <text x="72" y="64" text-anchor="end"
+                font-family="'DIN Pro', 'Helvetica Neue', sans-serif" font-weight="500"
+                font-size="13" fill="rgba(240, 240, 240, 0.55)"
+                letter-spacing="0.04em">$1T</text>
+          <text x="72" y="264" text-anchor="end"
+                font-family="'DIN Pro', 'Helvetica Neue', sans-serif" font-weight="500"
+                font-size="13" fill="rgba(240, 240, 240, 0.55)"
+                letter-spacing="0.04em">$500B</text>
+          <text x="72" y="464" text-anchor="end"
+                font-family="'DIN Pro', 'Helvetica Neue', sans-serif" font-weight="500"
+                font-size="13" fill="rgba(240, 240, 240, 0.55)"
+                letter-spacing="0.04em">$0</text>
+
+          <!-- X-axis labels -->
+          <text x="80" y="486" text-anchor="middle"
+                font-family="'DIN Pro', 'Helvetica Neue', sans-serif" font-weight="500"
+                font-size="14" fill="rgba(240, 240, 240, 0.55)"
+                letter-spacing="0.18em">2025</text>
+          <text x="247" y="486" text-anchor="middle"
+                font-family="'DIN Pro', 'Helvetica Neue', sans-serif" font-weight="500"
+                font-size="14" fill="rgba(240, 240, 240, 0.55)"
+                letter-spacing="0.18em">2030</text>
+          <text x="413" y="486" text-anchor="middle"
+                font-family="'DIN Pro', 'Helvetica Neue', sans-serif" font-weight="500"
+                font-size="14" fill="rgba(240, 240, 240, 0.55)"
+                letter-spacing="0.18em">2035</text>
+          <text x="580" y="486" text-anchor="middle"
+                font-family="'DIN Pro', 'Helvetica Neue', sans-serif" font-weight="500"
+                font-size="14" fill="rgba(240, 240, 240, 0.55)"
+                letter-spacing="0.18em">2040</text>
+
+          <!-- Filled area under the line -->
+          <path d="M 80 448 L 247 423 L 413 348 L 580 124 L 580 460 L 80 460 Z"
+                fill="url(#areaGrad)"/>
+
+          <!-- The line (Borealis gradient, polyline through data points) -->
+          <polyline points="80,448 247,423 413,348 580,124"
+                    fill="none"
+                    stroke="url(#lineGrad)" stroke-width="4"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+
+          <!-- Data points (dots on the line) -->
+          <!-- 2025 endpoint: bigger dot for visibility -->
+          <circle cx="80" cy="448" r="11" fill="#D91C5C"
+                  stroke="#1A1A1A" stroke-width="2"/>
+          <!-- 2030 waypoint -->
+          <circle cx="247" cy="423" r="6"
+                  fill="#1A1A1A" stroke="rgba(240, 240, 240, 0.65)" stroke-width="2"/>
+          <!-- 2035 waypoint -->
+          <circle cx="413" cy="348" r="6"
+                  fill="#1A1A1A" stroke="rgba(240, 240, 240, 0.65)" stroke-width="2"/>
+          <!-- 2040 endpoint: bigger dot for visibility -->
+          <circle cx="580" cy="124" r="11" fill="#26A9E0"
+                  stroke="#1A1A1A" stroke-width="2"/>
+
+          <!-- Endpoint value labels (positioned in clear whitespace, not crossing the line) -->
+
+          <!-- $30B at 2025: above the dot, slightly right (clear of y-axis labels and the line) -->
+          <text x="100" y="425" text-anchor="start"
+                font-family="'DIN Pro', 'Helvetica Neue', sans-serif" font-weight="500"
+                font-size="22" fill="#FFFFFF"
+                letter-spacing="-0.01em">$30B</text>
+
+          <!-- >$800B at 2040: above the dot, anchored right (clear of $1T gridline and the line) -->
+          <text x="568" y="100" text-anchor="end"
+                font-family="'DIN Pro', 'Helvetica Neue', sans-serif" font-weight="500"
+                font-size="26" fill="#FFFFFF"
+                letter-spacing="-0.01em">&gt;$800B</text>
+
+          <!-- CAGR annotation (top-left of plot area) -->
+          <text x="100" y="160" text-anchor="start"
+                font-family="'DIN Pro', 'Helvetica Neue', sans-serif" font-weight="500"
+                font-size="20" fill="#26A9E0"
+                letter-spacing="0.04em">~25% CAGR</text>
+          <text x="100" y="182" text-anchor="start"
+                font-family="'DIN Pro', 'Helvetica Neue', sans-serif" font-weight="300"
+                font-size="13" fill="rgba(240, 240, 240, 0.55)"
+                letter-spacing="0.18em">2025 - 2040</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="methodology-footnote">
+      Methodology: global biologists &times; automatable share &times; LCV per Unicorn system. Sources available on request.
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <div class="footer-text">
+      <span>Unicorn Biotechnologies<span class="pipe">|</span>Investor Deck 2026</span>
+      <span>10 / 13</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
