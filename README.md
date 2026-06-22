@@ -4,4 +4,4 @@ Live deck: https://unicorn-9000.github.io/unicorn-investor-deck-2026/deck_index.
 
 13 slides, 1920x1080 native.
 
-Contact: jack.reid@unicornb.io / adam.glen@unicornb.io / www.unicornb.io
+Contact: adam.glen@unicornb.io / www.unicornb.io
